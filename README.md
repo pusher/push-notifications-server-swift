@@ -1,2 +1,1 @@
-# push-notifications-server-swift
-Pusher Beams Swift Server SDK
+# Pusher Beams Swift Server SDK
