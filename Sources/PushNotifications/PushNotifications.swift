@@ -6,7 +6,6 @@ enum PushNotificationsError: Error {
     case interestsArrayCannotBeEmpty
     case interestsArrayContainsTooManyInterests(maxInterests: UInt)
     case interestsArrayContainsAnInvalidInterest(maxCharacters: UInt)
-    case somethingWentWrong // Rename
 }
 
 struct PushNotifications {
