@@ -1,10 +1,40 @@
 import Foundation
 
+enum PushNotificationsError: Error {
+    case instanceIdCannotBeAnEmptyString
+    case secretKeyCannotBeAnEmptyString
+    case interestsArrayCannotBeEmpty
+    case interestsArrayContainsTooManyInterests(maxInterests: UInt)
+    case interestsArrayContainsAnInvalidInterest(maxCharacters: UInt)
+    case somethingWentWrong // Rename
+}
+
 struct PushNotifications {
     let instanceId: String
     let secretKey: String
 
-    func publish(_ interests: [String], _ publishRequest: [String: Any], completion: @escaping (_ publishId: String?) -> Void) {
+    func publish(_ interests: [String], _ publishRequest: [String: Any], completion: @escaping (_ publishId: String) -> Void) throws {
+
+        if instanceId.isEmpty {
+            throw PushNotificationsError.instanceIdCannotBeAnEmptyString
+        }
+
+        if secretKey.isEmpty {
+            throw PushNotificationsError.secretKeyCannotBeAnEmptyString
+        }
+
+        if interests.isEmpty {
+            throw PushNotificationsError.interestsArrayCannotBeEmpty
+        }
+
+        if interests.count > 100 {
+            throw PushNotificationsError.interestsArrayContainsTooManyInterests(maxInterests: 100)
+        }
+
+        if !(interests.filter { $0.count > 164 }).isEmpty {
+            throw PushNotificationsError.interestsArrayContainsAnInvalidInterest(maxCharacters: 164)
+        }
+
         let sessionConfiguration = URLSessionConfiguration.default
         let session = URLSession.init(configuration: sessionConfiguration)
 
@@ -25,15 +55,13 @@ struct PushNotifications {
             guard
                 let data = data,
                 let httpURLResponse = response as? HTTPURLResponse
-            else {
-                completion(nil)
-                return
+                else {
+                    return // Improve
             }
 
             let statusCode = httpURLResponse.statusCode
             guard statusCode >= 200 && statusCode < 300, error == nil else {
-                completion(nil)
-                return
+                return // Improve
             }
 
             if let publishResponse = try? JSONDecoder().decode(PublishResponse.self, from: data) {
