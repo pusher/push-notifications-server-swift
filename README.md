@@ -1,5 +1,13 @@
 # Pusher Beams Swift Server SDK
 
+## Building the project
+
+`swift build`
+
+## Running the tests
+
+`swift test`
+
 ## Example
 
 ```swift
