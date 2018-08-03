@@ -1,17 +1,85 @@
 import Foundation
 
-enum PushNotificationsError: Error {
+/// Error thrown by PushNotifications.
+public enum PushNotificationsError: Error {
+    //// `instanceId` cannot be an empty String.
     case instanceIdCannotBeAnEmptyString
+    //// `secretKey` cannot be an empty String.
     case secretKeyCannotBeAnEmptyString
+    //// `interests` array cannot be empty.
     case interestsArrayCannotBeEmpty
+    /**
+    Interests array exceeded the number of maximum interests allowed.
+
+    - Parameter: maximum interests allowed value.
+    */
     case interestsArrayContainsTooManyInterests(maxInterests: UInt)
+    /**
+    Interests array contains at least one or more invalid interests.
+
+    - Parameter: maximum characters allowed value.
+    */
     case interestsArrayContainsAnInvalidInterest(maxCharacters: UInt)
 }
 
-struct PushNotifications {
-    let instanceId: String
-    let secretKey: String
+/**
+PushNotifications struct implements publish method
+that is used to publish push notifications to specified interests.
 
+- Precondition: `instanceId` should not be an empty string.
+- Precondition: `secretKey` should not be an empty string.
+*/
+public struct PushNotifications {
+    /// Pusher Beams Instance Id
+    let instanceId: String
+    /// Pusher Beams Secret Key
+    let secretKey: String
+    
+    /**
+    Publish the given `publishRequest` to the specified interests.
+
+    - Parameter interests: Array of strings that contains interests.
+    - Parameter publishRequest: Dictionary containing the body of the push notification publish request.
+    - Parameter completion: The block to execute when the `publish` operation is complete.
+
+    - Throws: An error of type `PushNotificationsError`.
+
+    - returns: Publish Id.
+
+    Example usage:
+ 
+    ````
+    // Pusher Beams Instance Id.
+    let instanceId = "c7c52433-8c65-43e6-9ef2-922d9ed9e196"
+    // Pusher Beams Secret Key.
+    let secretKey = "39817C9BCBF7F053CB151343D54EE75"
+
+    // PushNotifications instance.
+    let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
+
+    // Interests array.
+    let interests = ["pizza", "donuts"]
+    // Publish request: APNs, FCM.
+    let publishRequest = [
+        "apns": [
+            "aps": [
+                "alert": "Hello"
+            ]
+        ],
+        "fcm": [
+            "notification": [
+                "title": "Hello",
+				"body":  "Hello, world",
+            ]
+        ]
+    ]
+
+    // Call the publish method.
+    try? pushNotifications.publish(interests, publishRequest) { (publishId) in 
+        print(publishId)
+    }
+    ````
+    */
     func publish(_ interests: [String], _ publishRequest: [String: Any], completion: @escaping (_ publishId: String) -> Void) throws {
 
         if instanceId.isEmpty {
