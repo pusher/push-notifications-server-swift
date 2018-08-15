@@ -1,5 +1,7 @@
 # Pusher Beams Swift Server SDK
 
+[![Build Status](https://travis-ci.org/pusher/push-notifications-server-swift.svg?branch=master)](https://travis-ci.org/pusher/push-notifications-server-swift)
+
 ## Building the project
 
 `swift build`
