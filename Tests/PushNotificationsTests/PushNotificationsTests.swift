@@ -38,7 +38,7 @@ final class PushNotificationsTests: XCTestCase {
 
         XCTAssertThrowsError(try pushNotifications.publish(interests, publishRequest) { (_) in }) { error in
             guard case PushNotificationsError.instanceIdCannotBeAnEmptyString = error else {
-                return XCTFail()
+                return XCTFail("It should return instanceIdCannotBeAnEmptyString error.")
             }
         }
     }
@@ -60,7 +60,7 @@ final class PushNotificationsTests: XCTestCase {
 
         XCTAssertThrowsError(try pushNotifications.publish(interests, publishRequest) { (_) in }) { error in
             guard case PushNotificationsError.secretKeyCannotBeAnEmptyString = error else {
-                return XCTFail()
+                return XCTFail("It should return secretKeyCannotBeAnEmptyString error.")
             }
         }
     }
@@ -82,7 +82,7 @@ final class PushNotificationsTests: XCTestCase {
 
         XCTAssertThrowsError(try pushNotifications.publish(interests, publishRequest) { (_) in }) { error in
             guard case PushNotificationsError.interestsArrayCannotBeEmpty = error else {
-                return XCTFail()
+                return XCTFail("It should return interestsArrayCannotBeEmpty error.")
             }
         }
     }
@@ -109,7 +109,7 @@ final class PushNotificationsTests: XCTestCase {
 
         XCTAssertThrowsError(try pushNotifications.publish(interests, publishRequest) { (_) in }) { error in
             guard case PushNotificationsError.interestsArrayContainsTooManyInterests(let maximumNumberOfInterests) = error else {
-                return XCTFail()
+                return XCTFail("It should return interestsArrayContainsTooManyInterests error.")
             }
 
             XCTAssertEqual(maximumNumberOfInterests, 100, "Interests array can contain maximum of 100 interests.")
@@ -133,7 +133,7 @@ final class PushNotificationsTests: XCTestCase {
 
         XCTAssertThrowsError(try pushNotifications.publish(interests, publishRequest) { (_) in }) { error in
             guard case PushNotificationsError.interestsArrayContainsAnInvalidInterest(let maximumInterestCharacterCount) = error else {
-                return XCTFail()
+                return XCTFail("It should return interestsArrayContainsAnInvalidInterest error.")
             }
 
             XCTAssertEqual(maximumInterestCharacterCount, 164, "Interest name can be constructed from maximum of 164 characters.")
@@ -146,6 +146,6 @@ final class PushNotificationsTests: XCTestCase {
         ("testSecretKeyShouldNotBeEmptyString", testSecretKeyShouldNotBeEmptyString),
         ("testInterestsArrayShouldNotBeEmpty", testInterestsArrayShouldNotBeEmpty),
         ("testInterestsArrayShouldContainMaximumOf100Interests", testInterestsArrayShouldContainMaximumOf100Interests),
-        ("testInterestInTheArrayIsTooLong", testInterestInTheArrayIsTooLong),
+        ("testInterestInTheArrayIsTooLong", testInterestInTheArrayIsTooLong)
     ]
 }
