@@ -31,10 +31,21 @@ that is used to publish push notifications to specified interests.
 */
 public struct PushNotifications {
     /// Pusher Beams Instance Id
-    let instanceId: String
+    private let instanceId: String
     /// Pusher Beams Secret Key
-    let secretKey: String
-    
+    private let secretKey: String
+
+    /**
+     Creates a new `PushNotifications` instance.
+
+     - Parameter instanceId: Pusher Beams Instance Id.
+     - Parameter secretKey: Pusher Beams Secret Key.
+    */
+    public init(instanceId: String, secretKey: String) {
+        self.instanceId = instanceId
+        self.secretKey = secretKey
+    }
+
     /**
     Publish the given `publishRequest` to the specified interests.
 
@@ -80,7 +91,7 @@ public struct PushNotifications {
     }
     ````
     */
-    func publish(_ interests: [String], _ publishRequest: [String: Any], completion: @escaping (_ publishId: String) -> Void) throws {
+    public func publish(_ interests: [String], _ publishRequest: [String: Any], completion: @escaping (_ publishId: String) -> Void) throws {
 
         if instanceId.isEmpty {
             throw PushNotificationsError.instanceIdCannotBeAnEmptyString
