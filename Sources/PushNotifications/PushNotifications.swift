@@ -86,7 +86,7 @@ public struct PushNotifications {
     ]
 
     // Call the publish method.
-    try? pushNotifications.publish(interests, publishRequest) { (publishId) in 
+    try? pushNotifications.publish(interests, publishRequest) { publishId in 
         print(publishId)
     }
     ````
