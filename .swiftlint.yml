@@ -1,0 +1,9 @@
+included:
+  - Sources
+disabled_rules:
+  - line_length
+file_length:
+  warning: 450
+identifier_name:
+  excluded:
+    - id
