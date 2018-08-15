@@ -10,6 +10,28 @@
 
 `swift test`
 
+## Installation
+
+To include PushNotifications in your package, add the following to your Package.swift file.
+
+```swift
+// swift-tools-version:4.0
+import PackageDescription
+
+let package = Package(
+    name: "YourProjectName",
+    dependencies: [
+        ...
+        .package(url: "git@github.com:pusher/push-notifications-server-swift.git", .branch("master")),
+    ],
+    targets: [
+      .target(name: "YourProjectName", dependencies: ["PushNotifications", ... ])
+    ]
+)
+```
+
+Use `import PushNotifications` to access the APIs.
+
 ## Example
 
 ```swift
