@@ -8,6 +8,14 @@ public enum PushNotificationsError: Error {
     case secretKeyCannotBeAnEmptyString
     //// `interests` array cannot be empty.
     case interestsArrayCannotBeEmpty
+
+    /**
+     General error.
+
+     - Parameter: error message.
+     */
+    case error(String)
+
     /**
     Interests array exceeded the number of maximum interests allowed.
 
@@ -20,6 +28,13 @@ public enum PushNotificationsError: Error {
     - Parameter: maximum characters allowed value.
     */
     case interestsArrayContainsAnInvalidInterest(maxCharacters: UInt)
+}
+
+public typealias CompletionHandler<T> = (_ result: T) -> Void
+
+public enum Result<Value, Error> {
+    case value(Value)
+    case error(Error)
 }
 
 /**
@@ -91,8 +106,7 @@ public struct PushNotifications {
     }
     ````
     */
-    public func publish(_ interests: [String], _ publishRequest: [String: Any], completion: @escaping (_ publishId: String) -> Void) throws {
-
+    public func publish(_ interests: [String], _ publishRequest: [String: Any], completion: @escaping CompletionHandler<Result<String, Error>>) throws {
         if instanceId.isEmpty {
             throw PushNotificationsError.instanceIdCannotBeAnEmptyString
         }
@@ -117,7 +131,9 @@ public struct PushNotifications {
         let session = URLSession.init(configuration: sessionConfiguration)
 
         let urlString = "https://\(instanceId).pushnotifications.pusher.com/publish_api/v1/instances/\(instanceId)/publishes"
-        guard let url = URL(string: urlString) else { return }
+        guard let url = URL(string: urlString) else { 
+            return completion(.error(PushNotificationsError.error("[PushNotifications] - Error while constructing the URL.")))
+        }
 
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
@@ -130,20 +146,20 @@ public struct PushNotifications {
 
         urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: mutablePublishRequest)
         let dataTask = session.dataTask(with: urlRequest) { (data, response, error) in
-            guard
-                let data = data,
-                let httpURLResponse = response as? HTTPURLResponse
-                else {
-                    return // Improve
+            guard let data = data else {
+                return completion(.error(PushNotificationsError.error("[PushNotifications] - `data` is nil.")))
+            }
+            guard let httpURLResponse = response as? HTTPURLResponse else {
+                return completion(.error(PushNotificationsError.error("[PushNotifications] - `httpURLResponse` is nil.")))
             }
 
             let statusCode = httpURLResponse.statusCode
             guard statusCode >= 200 && statusCode < 300, error == nil else {
-                return // Improve
+                return completion(.error(PushNotificationsError.error("[PushNotifications] - Publish request failed: \(statusCode)")))
             }
 
             if let publishResponse = try? JSONDecoder().decode(PublishResponse.self, from: data) {
-                completion(publishResponse.id)
+                completion(.value(publishResponse.id))
             }
         }
 
