@@ -70,7 +70,7 @@ public struct PushNotifications {
 
     - Throws: An error of type `PushNotificationsError`.
 
-    - returns: Publish Id.
+    - returns: A non-empty device Id string if successful; or a non-nil error otherwise.
 
     Example usage:
  
@@ -101,8 +101,13 @@ public struct PushNotifications {
     ]
 
     // Call the publish method.
-    try? pushNotifications.publish(interests, publishRequest) { publishId in 
-        print(publishId)
+    try? pushNotifications.publish(interests, publishRequest) { result in
+        switch result {
+        case .value(let deviceId):
+            print("Device id: \(deviceId)")
+        case .error(let error):
+            print("Error: \(error)")
+        }
     }
     ````
     */
