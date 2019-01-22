@@ -61,28 +61,22 @@ public struct PushNotifications {
         self.secretKey = secretKey
     }
 
-    /**
+   /**
     Publish the given `publishRequest` to the specified interests.
-
     - Parameter interests: Array of strings that contains interests.
     - Parameter publishRequest: Dictionary containing the body of the push notification publish request.
     - Parameter completion: The block to execute when the `publish` operation is complete.
-
     - Throws: An error of type `PushNotificationsError`.
-
-    - returns: A non-empty device Id string if successful; or a non-nil error otherwise.
-
+    - returns: Publish Id.
     Example usage:
- 
+
     ````
     // Pusher Beams Instance Id.
     let instanceId = "c7c52433-8c65-43e6-9ef2-922d9ed9e196"
     // Pusher Beams Secret Key.
     let secretKey = "39817C9BCBF7F053CB151343D54EE75"
-
     // PushNotifications instance.
     let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
     // Interests array.
     let interests = ["pizza", "donuts"]
     // Publish request: APNs, FCM.
@@ -99,19 +93,14 @@ public struct PushNotifications {
             ]
         ]
     ]
-
     // Call the publish method.
-    try? pushNotifications.publish(interests, publishRequest) { result in
-        switch result {
-        case .value(let deviceId):
-            print("Device id: \(deviceId)")
-        case .error(let error):
-            print("Error: \(error)")
-        }
+    try? pushNotifications.publish(interests, publishRequest) { publishId in
+        print(publishId)
     }
     ````
     */
-    public func publish(_ interests: [String], _ publishRequest: [String: Any], completion: @escaping CompletionHandler<Result<String, Error>>) throws {
+    @available(*, deprecated, renamed: "publishToInterests", message: "Use `publishToInterests` method.")
+    public func publish(_ interests: [String], _ publishRequest: [String: Any], completion: @escaping (_ publishId: String) -> Void) throws {
         if instanceId.isEmpty {
             throw PushNotificationsError.instanceIdCannotBeAnEmptyString
         }
@@ -136,7 +125,108 @@ public struct PushNotifications {
         let session = URLSession.init(configuration: sessionConfiguration)
 
         let urlString = "https://\(instanceId).pushnotifications.pusher.com/publish_api/v1/instances/\(instanceId)/publishes"
-        guard let url = URL(string: urlString) else { 
+        guard let url = URL(string: urlString) else { return }
+
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        urlRequest.setValue("Bearer \(secretKey)", forHTTPHeaderField: "Authorization")
+
+        var mutablePublishRequest = publishRequest
+        mutablePublishRequest["interests"] = interests
+
+        urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: mutablePublishRequest)
+        let dataTask = session.dataTask(with: urlRequest) { (data, response, error) in
+            guard
+                let data = data,
+                let httpURLResponse = response as? HTTPURLResponse
+                else {
+                    return // Improve
+            }
+
+            let statusCode = httpURLResponse.statusCode
+            guard statusCode >= 200 && statusCode < 300, error == nil else {
+                return // Improve
+            }
+
+            if let publishResponse = try? JSONDecoder().decode(PublishResponse.self, from: data) {
+                completion(publishResponse.id)
+            }
+        }
+
+        dataTask.resume()
+    }
+
+    /**
+    Publish the given `publishRequest` to the specified interests.
+    - Parameter interests: Array of strings that contains interests.
+    - Parameter publishRequest: Dictionary containing the body of the push notification publish request.
+    - Parameter completion: The block to execute when the `publish` operation is complete.
+    - Throws: An error of type `PushNotificationsError`.
+    - returns: A non-empty device Id string if successful; or a non-nil error otherwise.
+    Example usage:
+
+    ````
+    // Pusher Beams Instance Id.
+    let instanceId = "c7c52433-8c65-43e6-9ef2-922d9ed9e196"
+    // Pusher Beams Secret Key.
+    let secretKey = "39817C9BCBF7F053CB151343D54EE75"
+    // PushNotifications instance.
+    let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
+    // Interests array.
+    let interests = ["pizza", "donuts"]
+    // Publish request: APNs, FCM.
+    let publishRequest = [
+        "apns": [
+            "aps": [
+                "alert": "Hello"
+            ]
+        ],
+        "fcm": [
+            "notification": [
+                "title": "Hello",
+				"body":  "Hello, world",
+            ]
+        ]
+    ]
+    // Call the publish method.
+    try? pushNotifications.publishToInterests(interests, publishRequest) { result in
+        switch result {
+        case .value(let deviceId):
+            print("Device id: \(deviceId)")
+        case .error(let error):
+            print("Error: \(error)")
+        }
+    }
+    ````
+    */
+    public func publishToInterests(_ interests: [String], _ publishRequest: [String: Any], completion: @escaping CompletionHandler<Result<String, Error>>) throws {
+        if instanceId.isEmpty {
+            throw PushNotificationsError.instanceIdCannotBeAnEmptyString
+        }
+
+        if secretKey.isEmpty {
+            throw PushNotificationsError.secretKeyCannotBeAnEmptyString
+        }
+
+        if interests.isEmpty {
+            throw PushNotificationsError.interestsArrayCannotBeEmpty
+        }
+
+        if interests.count > 100 {
+            throw PushNotificationsError.interestsArrayContainsTooManyInterests(maxInterests: 100)
+        }
+
+        if !(interests.filter { $0.count > 164 }).isEmpty {
+            throw PushNotificationsError.interestsArrayContainsAnInvalidInterest(maxCharacters: 164)
+        }
+
+        let sessionConfiguration = URLSessionConfiguration.default
+        let session = URLSession.init(configuration: sessionConfiguration)
+
+        let urlString = "https://\(instanceId).pushnotifications.pusher.com/publish_api/v1/instances/\(instanceId)/publishes"
+        guard let url = URL(string: urlString) else {
             return completion(.error(PushNotificationsError.error("[PushNotifications] - Error while constructing the URL.\nCheck that the URL string is not an empty string or string contains illegal characters.")))
         }
 
