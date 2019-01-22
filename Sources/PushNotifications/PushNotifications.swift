@@ -132,7 +132,7 @@ public struct PushNotifications {
 
         let urlString = "https://\(instanceId).pushnotifications.pusher.com/publish_api/v1/instances/\(instanceId)/publishes"
         guard let url = URL(string: urlString) else { 
-            return completion(.error(PushNotificationsError.error("[PushNotifications] - Error while constructing the URL.")))
+            return completion(.error(PushNotificationsError.error("[PushNotifications] - Error while constructing the URL.\nCheck that the URL string is not an empty string or string contains illegal characters.")))
         }
 
         var urlRequest = URLRequest(url: url)
@@ -147,15 +147,15 @@ public struct PushNotifications {
         urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: mutablePublishRequest)
         let dataTask = session.dataTask(with: urlRequest) { (data, response, error) in
             guard let data = data else {
-                return completion(.error(PushNotificationsError.error("[PushNotifications] - `data` is nil.")))
+                return completion(.error(PushNotificationsError.error("[PushNotifications] - Publish request failed. `data` is nil.")))
             }
             guard let httpURLResponse = response as? HTTPURLResponse else {
-                return completion(.error(PushNotificationsError.error("[PushNotifications] - `httpURLResponse` is nil.")))
+                return completion(.error(PushNotificationsError.error("[PushNotifications] - Publish request failed. `httpURLResponse` is nil.")))
             }
 
             let statusCode = httpURLResponse.statusCode
             guard statusCode >= 200 && statusCode < 300, error == nil else {
-                return completion(.error(PushNotificationsError.error("[PushNotifications] - Publish request failed: \(statusCode)")))
+                return completion(.error(PushNotificationsError.error("[PushNotifications] - Publish request failed. HTTP status code: \(statusCode)")))
             }
 
             if let publishResponse = try? JSONDecoder().decode(PublishResponse.self, from: data) {
