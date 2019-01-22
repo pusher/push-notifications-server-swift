@@ -99,7 +99,7 @@ public struct PushNotifications {
     }
     ````
     */
-    @available(*, deprecated, renamed: "publishToInterests", message: "Use `publishToInterests` method.")
+    @available(*, deprecated, renamed: "publishToInterests(_:_:completion:)", message: "Use 'publishToInterests(_:_:completion:)' method.")
     public func publish(_ interests: [String], _ publishRequest: [String: Any], completion: @escaping (_ publishId: String) -> Void) throws {
         do {
             try publishToInterests(interests, publishRequest) { result in
@@ -114,13 +114,13 @@ public struct PushNotifications {
 
                      This is a workaround so we don't break the API.
                      **/
-                    print("[PushNotifications] - Publish request failed.")
+                    print("[PushNotifications] - Publish request failed: \(error)")
                     completion("")
                 }
             }
         }
         catch {
-            throw PushNotificationsError.error("[PushNotifications] - Publish request failed. Error: \(error)")
+            throw PushNotificationsError.error("[PushNotifications] - Publish request failed: \(error)")
         }
     }
 
