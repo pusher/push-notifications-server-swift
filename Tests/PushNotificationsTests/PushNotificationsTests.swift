@@ -18,7 +18,7 @@ final class PushNotificationsTests: XCTestCase {
             ]
         ]
 
-        XCTAssertNoThrow(try pushNotifications.publish(interests, publishRequest) { (_) in })
+        XCTAssertNoThrow(try pushNotifications.publishToInterests(interests, publishRequest) { (_) in })
     }
 
     func testInstanceIdShouldNotBeEmptyString() {
@@ -36,7 +36,7 @@ final class PushNotificationsTests: XCTestCase {
             ]
         ]
 
-        XCTAssertThrowsError(try pushNotifications.publish(interests, publishRequest) { (_) in }) { error in
+        XCTAssertThrowsError(try pushNotifications.publishToInterests(interests, publishRequest) { (_) in }) { error in
             guard case PushNotificationsError.instanceIdCannotBeAnEmptyString = error else {
                 return XCTFail("It should return instanceIdCannotBeAnEmptyString error.")
             }
@@ -58,7 +58,7 @@ final class PushNotificationsTests: XCTestCase {
             ]
         ]
 
-        XCTAssertThrowsError(try pushNotifications.publish(interests, publishRequest) { (_) in }) { error in
+        XCTAssertThrowsError(try pushNotifications.publishToInterests(interests, publishRequest) { (_) in }) { error in
             guard case PushNotificationsError.secretKeyCannotBeAnEmptyString = error else {
                 return XCTFail("It should return secretKeyCannotBeAnEmptyString error.")
             }
@@ -80,7 +80,7 @@ final class PushNotificationsTests: XCTestCase {
             ]
         ]
 
-        XCTAssertThrowsError(try pushNotifications.publish(interests, publishRequest) { (_) in }) { error in
+        XCTAssertThrowsError(try pushNotifications.publishToInterests(interests, publishRequest) { (_) in }) { error in
             guard case PushNotificationsError.interestsArrayCannotBeEmpty = error else {
                 return XCTFail("It should return interestsArrayCannotBeEmpty error.")
             }
@@ -107,7 +107,7 @@ final class PushNotificationsTests: XCTestCase {
             ]
         ]
 
-        XCTAssertThrowsError(try pushNotifications.publish(interests, publishRequest) { (_) in }) { error in
+        XCTAssertThrowsError(try pushNotifications.publishToInterests(interests, publishRequest) { (_) in }) { error in
             guard case PushNotificationsError.interestsArrayContainsTooManyInterests(let maximumNumberOfInterests) = error else {
                 return XCTFail("It should return interestsArrayContainsTooManyInterests error.")
             }
@@ -131,7 +131,7 @@ final class PushNotificationsTests: XCTestCase {
             ]
         ]
 
-        XCTAssertThrowsError(try pushNotifications.publish(interests, publishRequest) { (_) in }) { error in
+        XCTAssertThrowsError(try pushNotifications.publishToInterests(interests, publishRequest) { (_) in }) { error in
             guard case PushNotificationsError.interestsArrayContainsAnInvalidInterest(let maximumInterestCharacterCount) = error else {
                 return XCTFail("It should return interestsArrayContainsAnInvalidInterest error.")
             }
