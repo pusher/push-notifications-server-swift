@@ -188,49 +188,71 @@ public struct PushNotifications {
             throw PushNotificationsError.interestsArrayContainsAnInvalidInterest(maxCharacters: 164)
         }
 
-        let sessionConfiguration = URLSessionConfiguration.default
-        let session = URLSession.init(configuration: sessionConfiguration)
-
         let urlString = "https://\(instanceId).pushnotifications.pusher.com/publish_api/v1/instances/\(instanceId)/publishes"
         guard let url = URL(string: urlString) else {
             return completion(.error(PushNotificationsError.error("[PushNotifications] - Error while constructing the URL.\nCheck that the URL string is not an empty string or string contains illegal characters.")))
         }
 
-        var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = "POST"
-        urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
-        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        urlRequest.setValue("Bearer \(secretKey)", forHTTPHeaderField: "Authorization")
-
         var mutablePublishRequest = publishRequest
         mutablePublishRequest["interests"] = interests
-
-        urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: mutablePublishRequest)
-        let dataTask = session.dataTask(with: urlRequest) { (data, response, error) in
+        
+        let httpBody = try? JSONSerialization.data(withJSONObject: mutablePublishRequest)
+        let request = setRequest(url: url, httpMethod: "POST", body: httpBody)
+        
+        networkRequest(request: request) { result in
+            switch result {
+            case .value(let deviceData):
+                do {
+                    let publishResponse = try JSONDecoder().decode(PublishResponse.self, from: deviceData)
+                    completion(.value(publishResponse.id))
+                }
+                catch {
+                    completion(.error(error))
+                }
+            case .error(let error):
+                completion(.error(error))
+            }
+        }
+    }
+    
+    private func networkRequest(request: URLRequest, completion: @escaping (_ result: Result<Data, Error>) -> Void) {
+        let sessionConfiguration = URLSessionConfiguration.default
+        let session = URLSession.init(configuration: sessionConfiguration)
+        
+        let dataTask = session.dataTask(with: request) { (data, response, error) in
             guard let data = data else {
                 return completion(.error(PushNotificationsError.error("[PushNotifications] - Publish request failed. `data` is nil.")))
             }
             guard let httpURLResponse = response as? HTTPURLResponse else {
                 return completion(.error(PushNotificationsError.error("[PushNotifications] - Publish request failed. `httpURLResponse` is nil.")))
             }
-
+            
             let statusCode = httpURLResponse.statusCode
             guard statusCode >= 200 && statusCode < 300, error == nil else {
-                return completion(.error(PushNotificationsError.error("[PushNotifications] - Publish request failed. HTTP status code: \(statusCode)")))
+                return completion(.error(PushNotificationsError.error("[PushNotifications] - Request failed. HTTP status code: \(statusCode)")))
             }
-
-            if let publishResponse = try? JSONDecoder().decode(PublishResponse.self, from: data) {
-                completion(.value(publishResponse.id))
-            }
+            
+            completion(.value(data))
         }
-
+        
         dataTask.resume()
+    }
+    
+    private func setRequest(url: URL, httpMethod: String, body: Data? = nil) -> URLRequest {
+        var request = URLRequest(url: url)
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(secretKey)", forHTTPHeaderField: "Authorization")
+        request.httpMethod = httpMethod
+        request.httpBody = body
+        
+        return request
     }
 }
 
 private struct PublishResponse: Decodable {
     let id: String
-
+    
     enum CodingKeys: String, CodingKey {
         case id = "publishId"
     }
