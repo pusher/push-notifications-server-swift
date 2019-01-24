@@ -44,7 +44,7 @@ that is used to publish push notifications to specified interests.
 - Precondition: `instanceId` should not be an empty string.
 - Precondition: `secretKey` should not be an empty string.
 */
-public struct PushNotifications {
+public struct PushNotifications: JWTTokenGenerable {
     /// Pusher Beams Instance Id
     private let instanceId: String
     /// Pusher Beams Secret Key
@@ -52,6 +52,7 @@ public struct PushNotifications {
     
     private let maxUserIdLength = 164
     private let maxNumUserIdsWhenPublishing = 1000
+    private let tokenTTL = Date(timeIntervalSinceNow: 24 * 60 * 60)
 
     /**
      Creates a new `PushNotifications` instance.
@@ -271,6 +272,26 @@ public struct PushNotifications {
         }
         catch {
             completion(.error(error))
+        }
+    }
+
+    public func authenticateUser(_ userId: String, completion: @escaping CompletionHandler<Result<String, Error>>) throws {
+        if userId.count < 1 {
+            throw PushNotificationsError.error("User Id cannot be empty")
+        }
+
+        if userId.count > maxUserIdLength {
+            throw PushNotificationsError.error("[PushNotifications] - User Id \(userId) length too long (expected fewer than \(maxUserIdLength+1) characters, got \(userId.count)")
+        }
+
+        let jwtPayload = JWTPayload(sub: userId, exp: tokenTTL, iss: "https://\(instanceId).pushnotifications.pusher.com", key: secretKey)
+        jwtTokenString(payload: jwtPayload) { result in
+            switch result {
+            case .value(let jwtTokenString):
+                completion(.value(jwtTokenString))
+            case .error(let error):
+                completion(.error(error))
+            }
         }
     }
     
