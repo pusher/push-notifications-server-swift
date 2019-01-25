@@ -60,9 +60,64 @@ let publishRequest = [
   ]
 ]
 
-// Call the publish method.
-try? pushNotifications.publish(interests, publishRequest) { publishId in
-  print(publishId)
+// Publish To Interests
+do {
+    try pushNotifications.publishToInterests(interests, publishRequest, completion: { result in
+        switch result {
+        case .value(let publishId):
+            print("\(publishId)")
+        case .error(let error):
+            print("\(error)")
+        }
+    })
+}
+catch {
+    print("\(error)")
+}
+
+// Publish To Users
+do {
+    try pushNotifications.publishToUsers(["jonathan", "jordan", "luís", "luka", "mina"], publishRequest, completion: { result in
+        switch result {
+        case .value(let publishId):
+            print("\(publishId)")
+        case .error(let error):
+            print("\(error)")
+        }
+    })
+}
+catch {
+    print("\(error)")
+}
+
+// Authenticate User
+do {
+    try pushNotifications.authenticateUser("Forrest Gump", completion: { result in
+        switch result {
+        case .value(let jwtTokenString):
+            print("\(jwtTokenString)")
+        case .error(let error):
+            print("\(error)")
+        }
+    })
+}
+catch {
+    print("\(error)")
+}
+
+// Delete User
+do {
+    try pushNotifications.deleteUser("Forrest Gump", completion: { result in
+        switch result {
+        case .value:
+            print("User deleted 👌")
+        case .error(let error):
+            print("\(error)")
+        }
+    })
+}
+catch {
+    print("\(error)")
 }
 ```
 
