@@ -158,7 +158,7 @@ final class PushNotificationsTests: XCTestCase {
         waitForExpectations(timeout: 3)
     }
 
-        func testInterestInTheArrayIsTooLong() {
+    func testInterestInTheArrayIsTooLong() {
         let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
         let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
 
