@@ -99,33 +99,28 @@ public struct PushNotifications: JWTTokenGenerable {
         ]
     ]
     // Call the publish method.
-    try? pushNotifications.publish(interests, publishRequest) { publishId in
+    pushNotifications.publish(interests, publishRequest) { publishId in
         print(publishId)
     }
     ````
     */
     @available(*, deprecated, renamed: "publishToInterests(_:_:completion:)", message: "Use 'publishToInterests(_:_:completion:)' method.")
     public func publish(_ interests: [String], _ publishRequest: [String: Any], completion: @escaping (_ publishId: String) -> Void) throws {
-        do {
-            try publishToInterests(interests, publishRequest) { result in
-                switch result {
-                case .value(let deviceId):
-                    completion(deviceId)
-                case .error(let error):
-                    /**
-                     Communicationg errors by returning an empty string is not ideal.
-                     Better option would be to set the `publishId` as an optional
-                     or to return the proper error which is implemented in `publishToInterests` method.
+        publishToInterests(interests, publishRequest) { result in
+            switch result {
+            case .value(let deviceId):
+                completion(deviceId)
+            case .error(let error):
+                /**
+                 Communicationg errors by returning an empty string is not ideal.
+                 Better option would be to set the `publishId` as an optional
+                 or to return the proper error which is implemented in `publishToInterests` method.
 
-                     This is a workaround so we don't break the API.
-                     **/
-                    print("[PushNotifications] - Publish request failed: \(error)")
-                    completion("")
-                }
+                 This is a workaround so we don't break the API.
+                 **/
+                print("[PushNotifications] - Publish request failed: \(error)")
+                completion("")
             }
-        }
-        catch {
-            throw PushNotificationsError.error("[PushNotifications] - Publish request failed: \(error)")
         }
     }
 
@@ -162,7 +157,7 @@ public struct PushNotifications: JWTTokenGenerable {
         ]
     ]
     // Call the publish method.
-    try? pushNotifications.publishToInterests(interests, publishRequest) { result in
+    pushNotifications.publishToInterests(interests, publishRequest) { result in
         switch result {
         case .value(let deviceId):
             print("Device id: \(deviceId)")
@@ -172,25 +167,25 @@ public struct PushNotifications: JWTTokenGenerable {
     }
     ````
     */
-    public func publishToInterests(_ interests: [String], _ publishRequest: [String: Any], completion: @escaping CompletionHandler<Result<String, Error>>) throws {
+    public func publishToInterests(_ interests: [String], _ publishRequest: [String: Any], completion: @escaping CompletionHandler<Result<String, Error>>) {
         if instanceId.isEmpty {
-            throw PushNotificationsError.instanceIdCannotBeAnEmptyString
+            return completion(.error(PushNotificationsError.instanceIdCannotBeAnEmptyString))
         }
 
         if secretKey.isEmpty {
-            throw PushNotificationsError.secretKeyCannotBeAnEmptyString
+            return completion(.error(PushNotificationsError.secretKeyCannotBeAnEmptyString))
         }
 
         if interests.isEmpty {
-            throw PushNotificationsError.interestsArrayCannotBeEmpty
+            return completion(.error(PushNotificationsError.interestsArrayCannotBeEmpty))
         }
 
         if interests.count > 100 {
-            throw PushNotificationsError.interestsArrayContainsTooManyInterests(maxInterests: 100)
+            return completion(.error(PushNotificationsError.interestsArrayContainsTooManyInterests(maxInterests: 100)))
         }
 
         if !(interests.filter { $0.count > 164 }).isEmpty {
-            throw PushNotificationsError.interestsArrayContainsAnInvalidInterest(maxCharacters: 164)
+            return completion(.error(PushNotificationsError.interestsArrayContainsAnInvalidInterest(maxCharacters: 164)))
         }
 
         let urlString = "https://\(instanceId).pushnotifications.pusher.com/publish_api/v1/instances/\(instanceId)/publishes"
@@ -225,23 +220,23 @@ public struct PushNotifications: JWTTokenGenerable {
         }
     }
     
-    public func publishToUsers(_ users: [String], _ publishRequest: [String: Any], completion: @escaping CompletionHandler<Result<String, Error>>) throws {
+    public func publishToUsers(_ users: [String], _ publishRequest: [String: Any], completion: @escaping CompletionHandler<Result<String, Error>>) {
         if users.count < 1 {
-            throw PushNotificationsError.error("[PushNotifications] - Must supply at least one user id.")
+            return completion(.error(PushNotificationsError.error("[PushNotifications] - Must supply at least one user id.")))
         }
         
         if users.count > maxNumUserIdsWhenPublishing {
-            throw PushNotificationsError.error("[PushNotifications] - Too many user ids supplied. API supports up to \(maxNumUserIdsWhenPublishing), got \(users.count)")
+            return completion(.error(PushNotificationsError.error("[PushNotifications] - Too many user ids supplied. API supports up to \(maxNumUserIdsWhenPublishing), got \(users.count)")))
         }
         
         let usersArrayContainsAnEmptyString = users.contains("")
         if usersArrayContainsAnEmptyString {
-            throw PushNotificationsError.error("[PushNotifications] - Empty user ids are not valid.")
+            return completion(.error(PushNotificationsError.error("[PushNotifications] - Empty user ids are not valid.")))
         }
         
         let usersArrayContainsUserIdWithInvalidLength = users.map { $0.count > maxUserIdLength }.contains(true)
         if usersArrayContainsUserIdWithInvalidLength {
-            throw PushNotificationsError.error("[PushNotifications] - User Id length too long (expected fewer than \(maxUserIdLength+1) characters)")
+            return completion(.error(PushNotificationsError.error("[PushNotifications] - User Id length too long (expected fewer than \(maxUserIdLength+1) characters)")))
         }
         
         let urlString = "https://\(instanceId).pushnotifications.pusher.com/publish_api/v1/instances/\(instanceId)/publishes/users"
@@ -276,13 +271,13 @@ public struct PushNotifications: JWTTokenGenerable {
         }
     }
 
-    public func authenticateUser(_ userId: String, completion: @escaping CompletionHandler<Result<String, Error>>) throws {
+    public func authenticateUser(_ userId: String, completion: @escaping CompletionHandler<Result<String, Error>>) {
         if userId.count < 1 {
-            throw PushNotificationsError.error("User Id cannot be empty")
+            return completion(.error(PushNotificationsError.error("User Id cannot be empty")))
         }
 
         if userId.count > maxUserIdLength {
-            throw PushNotificationsError.error("[PushNotifications] - User Id \(userId) length too long (expected fewer than \(maxUserIdLength+1) characters, got \(userId.count)")
+            return completion(.error(PushNotificationsError.error("[PushNotifications] - User Id \(userId) length too long (expected fewer than \(maxUserIdLength+1) characters, got \(userId.count)")))
         }
 
         let jwtPayload = JWTPayload(sub: userId, exp: tokenTTL, iss: "https://\(instanceId).pushnotifications.pusher.com", key: secretKey)
@@ -296,13 +291,13 @@ public struct PushNotifications: JWTTokenGenerable {
         }
     }
     
-    public func deleteUser(_ userId: String, completion: @escaping CompletionHandler<Result<Void, Error>>) throws {
+    public func deleteUser(_ userId: String, completion: @escaping CompletionHandler<Result<Void, Error>>) {
         if userId.count < 1 {
-            throw PushNotificationsError.error("[PushNotifications] - User Id cannot be empty.")
+            return completion(.error(PushNotificationsError.error("[PushNotifications] - User Id cannot be empty.")))
         }
         
         if userId.count > maxUserIdLength {
-            throw PushNotificationsError.error("[PushNotifications] - User Id \(userId) length too long (expected fewer than \(maxUserIdLength+1) characters, got \(userId.count)")
+            return completion(.error(PushNotificationsError.error("[PushNotifications] - User Id \(userId) length too long (expected fewer than \(maxUserIdLength+1) characters, got \(userId.count)")))
         }
         
         let urlString = "https://\(instanceId).pushnotifications.pusher.com/user_api/v1/instances/\(instanceId)/users/\(userId)"

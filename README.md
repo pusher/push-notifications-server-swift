@@ -61,64 +61,44 @@ let publishRequest = [
 ]
 
 // Publish To Interests
-do {
-    try pushNotifications.publishToInterests(interests, publishRequest, completion: { result in
-        switch result {
-        case .value(let publishId):
-            print("\(publishId)")
-        case .error(let error):
-            print("\(error)")
-        }
-    })
-}
-catch {
-    print("\(error)")
-}
+pushNotifications.publishToInterests(interests, publishRequest, completion: { result in
+    switch result {
+    case .value(let publishId):
+        print("\(publishId)")
+    case .error(let error):
+        print("\(error)")
+    }
+})
 
 // Publish To Users
-do {
-    try pushNotifications.publishToUsers(["jonathan", "jordan", "luís", "luka", "mina"], publishRequest, completion: { result in
-        switch result {
-        case .value(let publishId):
-            print("\(publishId)")
-        case .error(let error):
-            print("\(error)")
-        }
-    })
-}
-catch {
-    print("\(error)")
-}
+pushNotifications.publishToUsers(["jonathan", "jordan", "luís", "luka", "mina"], publishRequest, completion: { result in
+    switch result {
+    case .value(let publishId):
+        print("\(publishId)")
+    case .error(let error):
+        print("\(error)")
+    }
+})
 
 // Authenticate User
-do {
-    try pushNotifications.authenticateUser("Forrest Gump", completion: { result in
-        switch result {
-        case .value(let jwtTokenString):
-            print("\(jwtTokenString)")
-        case .error(let error):
-            print("\(error)")
-        }
-    })
-}
-catch {
-    print("\(error)")
-}
+pushNotifications.authenticateUser("aaa", completion: { result in
+    switch result {
+    case .value(let jwtTokenString):
+        print("\(jwtTokenString)")
+    case .error(let error):
+        print("\(error)")
+    }
+})
 
 // Delete User
-do {
-    try pushNotifications.deleteUser("Forrest Gump", completion: { result in
-        switch result {
-        case .value:
-            print("User deleted 👌")
-        case .error(let error):
-            print("\(error)")
-        }
-    })
-}
-catch {
-    print("\(error)")
-}
+pushNotifications.deleteUser("aaa", completion: { result in
+    switch result {
+    case .value:
+        print("User deleted 👌")
+    case .error(let error):
+        print("\(error)")
+    }
+})
 ```
 
 ## Communication
