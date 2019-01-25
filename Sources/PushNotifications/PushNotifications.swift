@@ -72,17 +72,17 @@ public struct PushNotifications: JWTTokenGenerable {
     - Parameter publishRequest: Dictionary containing the body of the push notification publish request.
     - Parameter completion: The block to execute when the `publish` operation is complete.
     - Throws: An error of type `PushNotificationsError`.
-    - returns: Publish Id.
+    - returns: Publish id.
     Example usage:
 
     ````
     // Pusher Beams Instance Id.
-    let instanceId = "c7c52433-8c65-43e6-9ef2-922d9ed9e196"
+    let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
     // Pusher Beams Secret Key.
-    let secretKey = "39817C9BCBF7F053CB151343D54EE75"
+    let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
     // PushNotifications instance.
     let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-    // Interests array.
+
     let interests = ["pizza", "donuts"]
     // Publish request: APNs, FCM.
     let publishRequest = [
@@ -98,8 +98,8 @@ public struct PushNotifications: JWTTokenGenerable {
             ]
         ]
     ]
-    // Call the publish method.
-    pushNotifications.publish(interests, publishRequest) { publishId in
+
+    try? pushNotifications.publish(interests, publishRequest) { publishId in
         print(publishId)
     }
     ````
@@ -128,19 +128,18 @@ public struct PushNotifications: JWTTokenGenerable {
     Publish the given `publishRequest` to the specified interests.
     - Parameter interests: Array of strings that contains interests.
     - Parameter publishRequest: Dictionary containing the body of the push notification publish request.
-    - Parameter completion: The block to execute when the `publish` operation is complete.
-    - Throws: An error of type `PushNotificationsError`.
-    - returns: A non-empty device Id string if successful; or a non-nil error otherwise.
+    - Parameter completion: The block to execute when the `publishToInterests` operation is complete.
+    - returns: A non-empty device id string if successful; or a non-nil `PushNotificationsError` error otherwise.
     Example usage:
 
     ````
     // Pusher Beams Instance Id.
-    let instanceId = "c7c52433-8c65-43e6-9ef2-922d9ed9e196"
+    let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
     // Pusher Beams Secret Key.
-    let secretKey = "39817C9BCBF7F053CB151343D54EE75"
+    let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
     // PushNotifications instance.
     let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-    // Interests array.
+
     let interests = ["pizza", "donuts"]
     // Publish request: APNs, FCM.
     let publishRequest = [
@@ -156,11 +155,11 @@ public struct PushNotifications: JWTTokenGenerable {
             ]
         ]
     ]
-    // Call the publish method.
+
     pushNotifications.publishToInterests(interests, publishRequest) { result in
         switch result {
-        case .value(let deviceId):
-            print("Device id: \(deviceId)")
+        case .value(let publishId):
+            print("Publish id: \(publishId)")
         case .error(let error):
             print("Error: \(error)")
         }
@@ -219,7 +218,49 @@ public struct PushNotifications: JWTTokenGenerable {
             completion(.error(error))
         }
     }
-    
+
+    /**
+    Publish the given `publishRequest` to the specified users.
+    - Parameter users: Array of strings that contains user ids.
+    - Parameter publishRequest: Dictionary containing the body of the push notification publish request.
+    - Parameter completion: The block to execute when the `publishToUsers` operation is complete.
+    - returns: A non-empty publish id string if successful; or a non-nil `PushNotificationsError` error otherwise.
+    Example usage:
+
+    ````
+    // Pusher Beams Instance Id.
+    let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
+    // Pusher Beams Secret Key.
+    let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+    // PushNotifications instance.
+    let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
+
+    let users = ["user1", "user2", "user3"]
+    // Publish request: APNs, FCM.
+    let publishRequest = [
+        "apns": [
+            "aps": [
+                "alert": "Hello"
+            ]
+        ],
+        "fcm": [
+            "notification": [
+                "title": "Hello",
+				"body":  "Hello, world",
+            ]
+        ]
+    ]
+
+    pushNotifications.publishToUsers(users, publishRequest) { result in
+        switch result {
+        case .value(let publishId):
+            print("Publish id: \(publishId)")
+        case .error(let error):
+            print("Error: \(error)")
+        }
+    }
+    ````
+    */
     public func publishToUsers(_ users: [String], _ publishRequest: [String: Any], completion: @escaping CompletionHandler<Result<String, Error>>) {
         if users.count < 1 {
             return completion(.error(PushNotificationsError.error("[PushNotifications] - Must supply at least one user id.")))
@@ -271,6 +312,31 @@ public struct PushNotifications: JWTTokenGenerable {
         }
     }
 
+    /**
+    Creates a signed JWT for a user id.
+    - Parameter userId: Id of a user for which we want to generate the JWT token.
+    - Parameter completion: The block to execute when the `authenticateUser` operation is complete.
+    - returns: A signed JWT if successful, or a non-nil `PushNotificationsError` error otherwise.
+    Example usage:
+
+    ````
+    // Pusher Beams Instance Id.
+    let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
+    // Pusher Beams Secret Key.
+    let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+    // PushNotifications instance.
+    let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
+
+    pushNotifications.authenticateUser("Al Pacino", completion: { result in
+        switch result {
+        case .value(let jwtTokenString):
+            print("\(jwtTokenString)")
+        case .error(let error):
+            print("\(error)")
+        }
+    })
+    ````
+    */
     public func authenticateUser(_ userId: String, completion: @escaping CompletionHandler<Result<String, Error>>) {
         if userId.count < 1 {
             return completion(.error(PushNotificationsError.error("User Id cannot be empty")))
@@ -290,7 +356,32 @@ public struct PushNotifications: JWTTokenGenerable {
             }
         }
     }
-    
+
+    /**
+    Contacts the Beams service to remove all the devices of the given user.
+    - Parameter userId: Id of a user for which we want to remove all the devices.
+    - Parameter completion: The block to execute when the `deleteUser` operation is complete.
+    - returns: Void if successful, or a non-nil `PushNotificationsError` error otherwise.
+    Example usage:
+
+    ````
+    // Pusher Beams Instance Id.
+    let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
+    // Pusher Beams Secret Key.
+    let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+    // PushNotifications instance.
+    let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
+
+    pushNotifications.deleteUser("Al Pacino", completion: { result in
+        switch result {
+        case .value:
+            print("User deleted 👌")
+        case .error(let error):
+            print("\(error)")
+        }
+    })
+    ````
+    */
     public func deleteUser(_ userId: String, completion: @escaping CompletionHandler<Result<Void, Error>>) {
         if userId.count < 1 {
             return completion(.error(PushNotificationsError.error("[PushNotifications] - User Id cannot be empty.")))

@@ -81,7 +81,7 @@ pushNotifications.publishToUsers(["jonathan", "jordan", "luís", "luka", "mina"]
 })
 
 // Authenticate User
-pushNotifications.authenticateUser("aaa", completion: { result in
+pushNotifications.authenticateUser("Elon M", completion: { result in
     switch result {
     case .value(let jwtTokenString):
         print("\(jwtTokenString)")
@@ -91,7 +91,7 @@ pushNotifications.authenticateUser("aaa", completion: { result in
 })
 
 // Delete User
-pushNotifications.deleteUser("aaa", completion: { result in
+pushNotifications.deleteUser("Elon M", completion: { result in
     switch result {
     case .value:
         print("User deleted 👌")
