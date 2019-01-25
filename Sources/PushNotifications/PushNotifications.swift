@@ -53,6 +53,7 @@ public struct PushNotifications: JWTTokenGenerable {
     private let maxUserIdLength = 164
     private let maxNumUserIdsWhenPublishing = 1000
     private let tokenTTL = Date(timeIntervalSinceNow: 24 * 60 * 60)
+    private let sdkVersion = "1.0.0"
 
     /**
      Creates a new `PushNotifications` instance.
@@ -349,6 +350,7 @@ public struct PushNotifications: JWTTokenGenerable {
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(secretKey)", forHTTPHeaderField: "Authorization")
+        request.setValue("push-notifications-server-swift \(sdkVersion)", forHTTPHeaderField: "X-Pusher-Library")
         request.httpMethod = httpMethod
         request.httpBody = body
         
