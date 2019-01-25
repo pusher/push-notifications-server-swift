@@ -8,7 +8,7 @@ public struct JWTPayload {
     let key: String
 }
 
-public protocol JWTTokenGenerable {
+protocol JWTTokenGenerable {
     func jwtTokenString(payload: JWTPayload, completion: @escaping CompletionHandler<Result<String, Error>>)
 }
 
@@ -18,7 +18,7 @@ private struct JWTClaims: Claims {
     let iss: String
 }
 
-public extension JWTTokenGenerable {
+extension JWTTokenGenerable {
     func jwtTokenString(payload: JWTPayload, completion: @escaping CompletionHandler<Result<String, Error>>) {
         let key = payload.key.data(using: .utf8)!
         let jwtEncoder = JWTEncoder(jwtSigner: JWTSigner.hs256(key: key))
