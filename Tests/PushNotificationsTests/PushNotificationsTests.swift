@@ -188,12 +188,300 @@ final class PushNotificationsTests: XCTestCase {
         waitForExpectations(timeout: 3)
     }
 
+    func testValidPublishToUsers() {
+        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
+        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+
+        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
+
+        let publishRequest = [
+            "apns": [
+                "aps": [
+                    "alert": "hi"
+                ]
+            ]
+        ]
+
+        let exp = expectation(description: "It should successfully publish to users.")
+
+        pushNotifications.publishToUsers(["jonathan", "jordan", "luís", "luka", "mina"], publishRequest, completion: { result in
+            switch result {
+            case .value(let publishId):
+                XCTAssertNotNil(publishId)
+                exp.fulfill()
+            case .error:
+                XCTFail()
+            }
+        })
+
+        waitForExpectations(timeout: 3)
+    }
+
+    func testPublishToUsersRequiresAtLeastOneUser() {
+        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
+        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+
+        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
+
+        let publishRequest = [
+            "apns": [
+                "aps": [
+                    "alert": "hi"
+                ]
+            ]
+        ]
+
+        let exp = expectation(description: "It should return an error.")
+
+        pushNotifications.publishToUsers([], publishRequest, completion: { result in
+            switch result {
+            case .value:
+                XCTFail()
+            case .error(let error):
+                XCTAssertNotNil(error)
+                exp.fulfill()
+            }
+        })
+
+        waitForExpectations(timeout: 3)
+    }
+
+    func testPublishToUsersUserShouldNotBeAnEmptyString() {
+        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
+        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+
+        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
+
+        let publishRequest = [
+            "apns": [
+                "aps": [
+                    "alert": "hi"
+                ]
+            ]
+        ]
+
+        let exp = expectation(description: "It should return an error.")
+
+        pushNotifications.publishToUsers([""], publishRequest, completion: { result in
+            switch result {
+            case .value:
+                XCTFail()
+            case .error(let error):
+                XCTAssertNotNil(error)
+                exp.fulfill()
+            }
+        })
+
+        waitForExpectations(timeout: 3)
+    }
+
+    func testPublishToUsersUsernameShouldBeLessThan165Characters() {
+        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
+        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+
+        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
+
+        let publishRequest = [
+            "apns": [
+                "aps": [
+                    "alert": "hi"
+                ]
+            ]
+        ]
+
+        let exp = expectation(description: "It should return an error.")
+
+        pushNotifications.publishToUsers(["askdsakdjlksajkldjkajdksjkdjkjkjdkajksjkljkajkdsjkajkdjkoiwqjijiofiowenfioneiveniownvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoin"], publishRequest, completion: { result in
+            switch result {
+            case .value:
+                XCTFail()
+            case .error(let error):
+                XCTAssertNotNil(error)
+                exp.fulfill()
+            }
+        })
+
+        waitForExpectations(timeout: 3)
+    }
+
+    func testPublishToMoreThan1000UsersShouldFail() {
+        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
+        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+
+        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
+
+        let publishRequest = [
+            "apns": [
+                "aps": [
+                    "alert": "hi"
+                ]
+            ]
+        ]
+        
+        var users: [String] = []
+
+        for _ in 0...1000 {
+            users.append("a")
+        }
+
+        let exp = expectation(description: "It should return an error.")
+
+        pushNotifications.publishToUsers(users, publishRequest, completion: { result in
+            switch result {
+            case .value:
+                XCTFail()
+            case .error(let error):
+                XCTAssertNotNil(error)
+                exp.fulfill()
+            }
+        })
+
+        waitForExpectations(timeout: 3)
+    }
+
+    func testItShouldAuthenticateTheUserSuccessfully() {
+        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
+        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+
+        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
+    
+        let exp = expectation(description: "It should successfully authenticate the user.")
+
+        pushNotifications.authenticateUser("aaa", completion: { result in
+            switch result {
+            case .value(let jwtTokenString):
+                XCTAssertNotNil(jwtTokenString)
+                exp.fulfill()
+            case .error:
+                XCTFail()
+            }
+        })
+
+        waitForExpectations(timeout: 3)
+    }
+
+    func testItShouldFailToAuthenticateUserWithEmptyId() {
+        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
+        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+
+        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
+    
+        let exp = expectation(description: "It should return an error.")
+
+        pushNotifications.authenticateUser("", completion: { result in
+            switch result {
+            case .value:
+                XCTFail()
+            case .error(let error):
+                XCTAssertNotNil(error)
+                exp.fulfill()
+            }
+        })
+
+        waitForExpectations(timeout: 3)
+    }
+
+    func testItShouldFailToAuthenticateUserWithIdThatIsTooLong() {
+        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
+        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+
+        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
+    
+        let exp = expectation(description: "It should return an error.")
+
+        pushNotifications.authenticateUser("askdsakdjlksajkldjkajdksjkdjkjkjdkajksjkljkajkdsjkajkdjkoiwqjijiofiowenfioneiveniownvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoin", completion: { result in
+            switch result {
+            case .value:
+                XCTFail()
+            case .error(let error):
+                XCTAssertNotNil(error)
+                exp.fulfill()
+            }
+        })
+
+        waitForExpectations(timeout: 3)
+    }
+
+    func testItShouldDeleteTheUserSuccessfully() {
+        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
+        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+
+        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
+    
+        let exp = expectation(description: "It should successfully authenticate the user.")
+
+        pushNotifications.deleteUser("aaa", completion: { result in
+            switch result {
+            case .value(let jwtTokenString):
+                XCTAssertNotNil(jwtTokenString)
+                exp.fulfill()
+            case .error:
+                XCTFail()
+            }
+        })
+
+        waitForExpectations(timeout: 3)
+    }
+
+    func testItShouldFailToDeleteUserWithEmptyId() {
+        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
+        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+
+        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
+    
+        let exp = expectation(description: "It should return an error.")
+
+        pushNotifications.deleteUser("", completion: { result in
+            switch result {
+            case .value:
+                XCTFail()
+            case .error(let error):
+                XCTAssertNotNil(error)
+                exp.fulfill()
+            }
+        })
+
+        waitForExpectations(timeout: 3)
+    }
+
+    func testItShouldFailToDeleteUserWithIdThatIsTooLong() {
+        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
+        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+
+        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
+    
+        let exp = expectation(description: "It should return an error.")
+
+        pushNotifications.deleteUser("askdsakdjlksajkldjkajdksjkdjkjkjdkajksjkljkajkdsjkajkdjkoiwqjijiofiowenfioneiveniownvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoin", completion: { result in
+            switch result {
+            case .value:
+                XCTFail()
+            case .error(let error):
+                XCTAssertNotNil(error)
+                exp.fulfill()
+            }
+        })
+
+        waitForExpectations(timeout: 3)
+    }
+
     static var allTests = [
         ("testValidInstance", testValidInstance),
         ("testInstanceIdShouldNotBeEmptyString", testInstanceIdShouldNotBeEmptyString),
         ("testSecretKeyShouldNotBeEmptyString", testSecretKeyShouldNotBeEmptyString),
         ("testInterestsArrayShouldNotBeEmpty", testInterestsArrayShouldNotBeEmpty),
         ("testInterestsArrayShouldContainMaximumOf100Interests", testInterestsArrayShouldContainMaximumOf100Interests),
-        ("testInterestInTheArrayIsTooLong", testInterestInTheArrayIsTooLong)
+        ("testInterestInTheArrayIsTooLong", testInterestInTheArrayIsTooLong),
+        ("testValidPublishToUsers", testValidPublishToUsers),
+        ("testPublishToUsersRequiresAtLeastOneUser", testPublishToUsersRequiresAtLeastOneUser),
+        ("testPublishToUsersUserShouldNotBeAnEmptyString", testPublishToUsersUserShouldNotBeAnEmptyString),
+        ("testPublishToUsersUsernameShouldBeLessThan165Characters", testPublishToUsersUsernameShouldBeLessThan165Characters),
+        ("testPublishToMoreThan1000UsersShouldFail", testPublishToMoreThan1000UsersShouldFail),
+        ("testItShouldAuthenticateTheUserSuccessfully", testItShouldAuthenticateTheUserSuccessfully),
+        ("testItShouldFailToAuthenticateUserWithEmptyId", testItShouldFailToAuthenticateUserWithEmptyId),
+        ("testItShouldFailToAuthenticateUserWithIdThatIsTooLong", testItShouldFailToAuthenticateUserWithIdThatIsTooLong),
+        ("testItShouldDeleteTheUserSuccessfully", testItShouldDeleteTheUserSuccessfully),
+        ("testItShouldFailToDeleteUserWithEmptyId", testItShouldFailToDeleteUserWithEmptyId),
+        ("testItShouldFailToDeleteUserWithIdThatIsTooLong", testItShouldFailToDeleteUserWithIdThatIsTooLong)
     ]
 }
