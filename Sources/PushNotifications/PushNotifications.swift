@@ -246,7 +246,7 @@ public struct PushNotifications: JWTTokenGenerable {
         "fcm": [
             "notification": [
                 "title": "Hello",
-				"body":  "Hello, world",
+                "body":  "Hello, world",
             ]
         ]
     ]
