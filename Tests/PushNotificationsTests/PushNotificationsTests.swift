@@ -347,7 +347,7 @@ final class PushNotificationsTests: XCTestCase {
     
         let exp = expectation(description: "It should successfully authenticate the user.")
 
-        pushNotifications.authenticateUser("aaa", completion: { result in
+        pushNotifications.generateToken("aaa", completion: { result in
             switch result {
             case .value(let jwtTokenString):
                 XCTAssertNotNil(jwtTokenString)
@@ -360,7 +360,7 @@ final class PushNotificationsTests: XCTestCase {
         waitForExpectations(timeout: 3)
     }
 
-    func testItShouldFailToAuthenticateUserWithEmptyId() {
+    func testItShouldFailToGenerateTokenWithEmptyId() {
         let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
         let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
 
@@ -368,7 +368,7 @@ final class PushNotificationsTests: XCTestCase {
     
         let exp = expectation(description: "It should return an error.")
 
-        pushNotifications.authenticateUser("", completion: { result in
+        pushNotifications.generateToken("", completion: { result in
             switch result {
             case .value:
                 XCTFail()
@@ -381,7 +381,7 @@ final class PushNotificationsTests: XCTestCase {
         waitForExpectations(timeout: 3)
     }
 
-    func testItShouldFailToAuthenticateUserWithIdThatIsTooLong() {
+    func testItShouldFailToGenerateTokenWithIdThatIsTooLong() {
         let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
         let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
 
@@ -389,7 +389,7 @@ final class PushNotificationsTests: XCTestCase {
     
         let exp = expectation(description: "It should return an error.")
 
-        pushNotifications.authenticateUser("askdsakdjlksajkldjkajdksjkdjkjkjdkajksjkljkajkdsjkajkdjkoiwqjijiofiowenfioneiveniownvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoin", completion: { result in
+        pushNotifications.generateToken("askdsakdjlksajkldjkajdksjkdjkjkjdkajksjkljkajkdsjkajkdjkoiwqjijiofiowenfioneiveniownvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoin", completion: { result in
             switch result {
             case .value:
                 XCTFail()
@@ -478,8 +478,8 @@ final class PushNotificationsTests: XCTestCase {
         ("testPublishToUsersUsernameShouldBeLessThan165Characters", testPublishToUsersUsernameShouldBeLessThan165Characters),
         ("testPublishToMoreThan1000UsersShouldFail", testPublishToMoreThan1000UsersShouldFail),
         ("testItShouldAuthenticateTheUserSuccessfully", testItShouldAuthenticateTheUserSuccessfully),
-        ("testItShouldFailToAuthenticateUserWithEmptyId", testItShouldFailToAuthenticateUserWithEmptyId),
-        ("testItShouldFailToAuthenticateUserWithIdThatIsTooLong", testItShouldFailToAuthenticateUserWithIdThatIsTooLong),
+        ("testItShouldFailToGenerateTokenWithEmptyId", testItShouldFailToGenerateTokenWithEmptyId),
+        ("testItShouldFailToGenerateTokenWithIdThatIsTooLong", testItShouldFailToGenerateTokenWithIdThatIsTooLong),
         ("testItShouldDeleteTheUserSuccessfully", testItShouldDeleteTheUserSuccessfully),
         ("testItShouldFailToDeleteUserWithEmptyId", testItShouldFailToDeleteUserWithEmptyId),
         ("testItShouldFailToDeleteUserWithIdThatIsTooLong", testItShouldFailToDeleteUserWithIdThatIsTooLong)

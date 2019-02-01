@@ -315,7 +315,7 @@ public struct PushNotifications: JWTTokenGenerable {
     /**
     Creates a signed JWT for a user id.
     - Parameter userId: Id of a user for which we want to generate the JWT token.
-    - Parameter completion: The block to execute when the `authenticateUser` operation is complete.
+    - Parameter completion: The block to execute when the `generateToken` operation is complete.
     - returns: A signed JWT if successful, or a non-nil `PushNotificationsError` error otherwise.
     Example usage:
 
@@ -327,7 +327,7 @@ public struct PushNotifications: JWTTokenGenerable {
     // PushNotifications instance.
     let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
 
-    pushNotifications.authenticateUser("Al Pacino", completion: { result in
+    pushNotifications.generateToken("Al Pacino", completion: { result in
         switch result {
         case .value(let jwtTokenString):
             print("\(jwtTokenString)")
@@ -337,7 +337,7 @@ public struct PushNotifications: JWTTokenGenerable {
     })
     ````
     */
-    public func authenticateUser(_ userId: String, completion: @escaping CompletionHandler<Result<String, Error>>) {
+    public func generateToken(_ userId: String, completion: @escaping CompletionHandler<Result<String, Error>>) {
         if userId.count < 1 {
             return completion(.error(PushNotificationsError.error("User Id cannot be empty")))
         }
