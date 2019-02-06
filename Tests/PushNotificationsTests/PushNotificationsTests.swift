@@ -349,8 +349,8 @@ final class PushNotificationsTests: XCTestCase {
 
         pushNotifications.generateToken("aaa", completion: { result in
             switch result {
-            case .value(let jwtTokenString):
-                XCTAssertNotNil(jwtTokenString)
+            case .value(let jwtToken):
+                XCTAssertNotNil(jwtToken)
                 exp.fulfill()
             case .error:
                 XCTFail()
@@ -408,12 +408,11 @@ final class PushNotificationsTests: XCTestCase {
 
         let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
     
-        let exp = expectation(description: "It should successfully authenticate the user.")
+        let exp = expectation(description: "It should successfully delete the user.")
 
         pushNotifications.deleteUser("aaa", completion: { result in
             switch result {
-            case .value(let jwtTokenString):
-                XCTAssertNotNil(jwtTokenString)
+            case .value:
                 exp.fulfill()
             case .error:
                 XCTFail()

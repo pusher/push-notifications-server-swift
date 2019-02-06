@@ -81,10 +81,10 @@ pushNotifications.publishToUsers(["jonathan", "jordan", "luís", "luka", "mina"]
 })
 
 // Authenticate User
-pushNotifications.authenticateUser("Elon M", completion: { result in
+pushNotifications.generateToken("Elon M", completion: { result in
     switch result {
-    case .value(let jwtTokenString):
-        print("\(jwtTokenString)")
+    case .value(let jwtToken):
+        print("\(jwtToken)")
     case .error(let error):
         print("\(error)")
     }

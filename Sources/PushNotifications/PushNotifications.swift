@@ -329,15 +329,15 @@ public struct PushNotifications: JWTTokenGenerable {
 
     pushNotifications.generateToken("Al Pacino", completion: { result in
         switch result {
-        case .value(let jwtTokenString):
-            print("\(jwtTokenString)")
+        case .value(let jwtToken):
+            print("\(jwtToken)")
         case .error(let error):
             print("\(error)")
         }
     })
     ````
     */
-    public func generateToken(_ userId: String, completion: @escaping CompletionHandler<Result<String, Error>>) {
+    public func generateToken(_ userId: String, completion: @escaping CompletionHandler<Result<Dictionary<String, String>, Error>>) {
         if userId.count < 1 {
             return completion(.error(PushNotificationsError.error("User Id cannot be empty")))
         }
@@ -350,7 +350,7 @@ public struct PushNotifications: JWTTokenGenerable {
         jwtTokenString(payload: jwtPayload) { result in
             switch result {
             case .value(let jwtTokenString):
-                completion(.value(jwtTokenString))
+                completion(.value(["token": jwtTokenString]))
             case .error(let error):
                 completion(.error(error))
             }
