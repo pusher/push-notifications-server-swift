@@ -81,7 +81,7 @@ pushNotifications.publishToUsers(["jonathan", "jordan", "luís", "luka", "mina"]
 })
 
 // Authenticate User
-pushNotifications.generateToken("Elon M", completion: { result in
+pushNotifications.generateToken("Elmo", completion: { result in
     switch result {
     case .value(let jwtToken):
         // 'jwtToken' is a Dictionary<String, String>
@@ -93,7 +93,7 @@ pushNotifications.generateToken("Elon M", completion: { result in
 })
 
 // Delete User
-pushNotifications.deleteUser("Elon M", completion: { result in
+pushNotifications.deleteUser("Elmo", completion: { result in
     switch result {
     case .value:
         print("User deleted 👌")
