@@ -350,6 +350,8 @@ final class PushNotificationsTests: XCTestCase {
         pushNotifications.generateToken("aaa", completion: { result in
             switch result {
             case .value(let jwtToken):
+                // 'jwtToken' is a Dictionary<String, String>
+                // Example: ["token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWEiLCJleHAiOjE"]
                 XCTAssertNotNil(jwtToken)
                 exp.fulfill()
             case .error:

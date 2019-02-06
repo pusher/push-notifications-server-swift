@@ -84,6 +84,8 @@ pushNotifications.publishToUsers(["jonathan", "jordan", "luís", "luka", "mina"]
 pushNotifications.generateToken("Elon M", completion: { result in
     switch result {
     case .value(let jwtToken):
+        // 'jwtToken' is a Dictionary<String, String>
+        // Example: ["token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWEiLCJleHAiOjE"]
         print("\(jwtToken)")
     case .error(let error):
         print("\(error)")
