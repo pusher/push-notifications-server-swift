@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/pusher/push-notifications-server-swift/compare/1.0.0...HEAD)
 
-## [1.0.0] - 2019-02-06
+## 1.0.0 - 2019-02-06
 
 ### Added
 
