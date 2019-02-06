@@ -22,7 +22,7 @@ let package = Package(
     name: "YourProjectName",
     dependencies: [
         ...
-        .package(url: "git@github.com:pusher/push-notifications-server-swift.git", .branch("master")),
+        .package(url: "git@github.com:pusher/push-notifications-server-swift.git", from: "1.0.0",
     ],
     targets: [
       .target(name: "YourProjectName", dependencies: ["PushNotifications", ... ])
@@ -60,10 +60,47 @@ let publishRequest = [
   ]
 ]
 
-// Call the publish method.
-try? pushNotifications.publish(interests, publishRequest) { publishId in
-  print(publishId)
-}
+// Publish To Interests
+pushNotifications.publishToInterests(interests, publishRequest, completion: { result in
+    switch result {
+    case .value(let publishId):
+        print("\(publishId)")
+    case .error(let error):
+        print("\(error)")
+    }
+})
+
+// Publish To Users
+pushNotifications.publishToUsers(["jonathan", "jordan", "luís", "luka", "mina"], publishRequest, completion: { result in
+    switch result {
+    case .value(let publishId):
+        print("\(publishId)")
+    case .error(let error):
+        print("\(error)")
+    }
+})
+
+// Authenticate User
+pushNotifications.generateToken("Elmo", completion: { result in
+    switch result {
+    case .value(let jwtToken):
+        // 'jwtToken' is a Dictionary<String, String>
+        // Example: ["token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWEiLCJleHAiOjE"]
+        print("\(jwtToken)")
+    case .error(let error):
+        print("\(error)")
+    }
+})
+
+// Delete User
+pushNotifications.deleteUser("Elmo", completion: { result in
+    switch result {
+    case .value:
+        print("User deleted 👌")
+    case .error(let error):
+        print("\(error)")
+    }
+})
 ```
 
 ## Communication
