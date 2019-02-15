@@ -391,7 +391,7 @@ public struct PushNotifications: JWTTokenGenerable {
             return completion(.error(PushNotificationsError.error("[PushNotifications] - User Id \(userId) length too long (expected fewer than \(maxUserIdLength+1) characters, got \(userId.count)")))
         }
         
-        let urlString = "https://\(instanceId).pushnotifications.pusher.com/user_api/v1/instances/\(instanceId)/users/\(userId)"
+        let urlString = "https://\(instanceId).pushnotifications.pusher.com/customer_api/v1/instances/\(instanceId)/users/\(userId)"
         guard let url = URL(string: urlString) else {
             return completion(.error(PushNotificationsError.error("[PushNotifications] - Error while constructing the URL.\nCheck that the URL string is not an empty string or string contains illegal characters.")))
         }
