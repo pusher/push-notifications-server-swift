@@ -53,7 +53,7 @@ public struct PushNotifications: JWTTokenGenerable {
     private let maxUserIdLength = 164
     private let maxNumUserIdsWhenPublishing = 1000
     private let tokenTTL = Date(timeIntervalSinceNow: 24 * 60 * 60)
-    private let sdkVersion = "1.0.0"
+    private let sdkVersion = "1.0.1"
 
     /**
      Creates a new `PushNotifications` instance.
