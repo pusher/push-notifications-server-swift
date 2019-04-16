@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-- Format in which we send the `exp` time.
+- Beams Token generation format in which we send the `exp` time.
 
 ## 1.0.1 - 2019-02-15
 
