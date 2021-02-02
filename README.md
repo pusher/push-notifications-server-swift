@@ -1,6 +1,6 @@
 # Pusher Beams Swift Server SDK
 
-[![Build Status](https://github.com/pusher/push-notifications-server-swift/workflows/CI/badge.svg)
+![Build Status](https://github.com/pusher/push-notifications-server-swift/workflows/CI/badge.svg)
 
 ## Building the project
 
