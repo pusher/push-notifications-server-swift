@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 /// Error thrown by PushNotifications.
 public enum PushNotificationsError: Error {
