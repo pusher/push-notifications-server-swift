@@ -22,7 +22,7 @@ let package = Package(
     name: "YourProjectName",
     dependencies: [
         ...
-        .package(url: "git@github.com:pusher/push-notifications-server-swift.git", from: "1.0.2",
+        .package(url: "git@github.com:pusher/push-notifications-server-swift.git", from: "1.0.3",
     ],
     targets: [
       .target(name: "YourProjectName", dependencies: ["PushNotifications", ... ])
