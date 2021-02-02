@@ -3,5 +3,6 @@ import XCTest
 import PushNotificationsTests
 
 var tests = [XCTestCaseEntry]()
-tests += PushNotificationsTests.allTests()
+tests += PushNotificationsTests.__allTests()
+
 XCTMain(tests)
