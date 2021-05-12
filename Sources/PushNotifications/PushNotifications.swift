@@ -155,30 +155,20 @@ public struct PushNotifications: JWTTokenGenerable {
                                _ publishRequest: [String: Any],
                                completion: @escaping (Result<String, Error>) -> Void) {
         if users.isEmpty {
-            let errorMessage = "[PushNotifications] - Must supply at least one user id."
-            return completion(.failure(PushNotificationsError.error(errorMessage)))
+            return completion(.failure(PushNotificationsError.usersArrayCannotBeEmpty))
         }
 
         if users.count > Self.maxNumUserIdsWhenPublishing {
-            let errorMessage = """
-            [PushNotifications] - Too many user ids supplied. \
-            API supports up to \(Self.maxNumUserIdsWhenPublishing), got \(users.count)
-            """
-            return completion(.failure(PushNotificationsError.error(errorMessage)))
+            return completion(.failure(PushNotificationsError.usersArrayContainsTooManyUsers(maxUsers: Self.maxNumUserIdsWhenPublishing)))
         }
 
         let usersContainsAnEmptyString = users.contains("")
         if usersContainsAnEmptyString {
-            let errorMessage = "[PushNotifications] - Empty user ids are not valid."
-            return completion(.failure(PushNotificationsError.error(errorMessage)))
+            return completion(.failure(PushNotificationsError.usersArrayCannotContainEmptyString))
         }
 
         if users.contains(where: { $0.count > Self.maxInterestOrUserIdLength }) {
-            let errorMessage = """
-            [PushNotifications] - User Id length too long \
-            (expected fewer than \(Self.maxInterestOrUserIdLength + 1) characters)
-            """
-            return completion(.failure(PushNotificationsError.error(errorMessage)))
+            return completion(.failure(PushNotificationsError.usersArrayContainsAnInvalidUser(maxCharacters: Self.maxInterestOrUserIdLength)))
         }
 
         networkService.publishToUsers(users,
@@ -214,15 +204,11 @@ public struct PushNotifications: JWTTokenGenerable {
     public func generateToken(_ userId: String,
                               completion: @escaping (Result<[String: String], Error>) -> Void) {
         if userId.isEmpty {
-            return completion(.failure(PushNotificationsError.error("User Id cannot be empty")))
+            return completion(.failure(PushNotificationsError.userIdCannotBeAnEmptyString))
         }
 
         if userId.count > Self.maxInterestOrUserIdLength {
-            let errorMessage = """
-            [PushNotifications] - User Id \(userId) length too long \
-            (expected fewer than \(Self.maxInterestOrUserIdLength + 1) characters, got \(userId.count)
-            """
-            return completion(.failure(PushNotificationsError.error(errorMessage)))
+            return completion(.failure(PushNotificationsError.userIdInvalid(maxCharacters: Self.maxInterestOrUserIdLength)))
         }
 
         let jwtPayload = JWTPayload(sub: userId,
@@ -267,15 +253,11 @@ public struct PushNotifications: JWTTokenGenerable {
     public func deleteUser(_ userId: String,
                            completion: @escaping (Result<Void, Error>) -> Void) {
         if userId.isEmpty {
-            return completion(.failure(PushNotificationsError.error("[PushNotifications] - User Id cannot be empty.")))
+            return completion(.failure(PushNotificationsError.userIdCannotBeAnEmptyString))
         }
 
         if userId.count > Self.maxInterestOrUserIdLength {
-            let errorMessage = """
-            [PushNotifications] - User Id \(userId) length too long \
-            (expected fewer than \(Self.maxInterestOrUserIdLength + 1) characters, got \(userId.count)
-            """
-            return completion(.failure(PushNotificationsError.error(errorMessage)))
+            return completion(.failure(PushNotificationsError.userIdInvalid(maxCharacters: Self.maxInterestOrUserIdLength)))
         }
 
         networkService.deleteUser(userId, completion: completion)
