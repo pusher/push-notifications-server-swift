@@ -2,6 +2,37 @@ import Foundation
 
 struct NetworkService {
 
+    enum Error: LocalizedError {
+
+        case emptyRepsonseData
+
+        case failedResponse(statusCode: Int)
+
+        case invalidOrEmptyUrlString
+
+        case unexpectedResponse
+
+        var errorDescription: String? {
+            switch self {
+            case .emptyRepsonseData:
+                return NSLocalizedString("The network response does not contain any data.",
+                                         comment: "'.emptyRepsonseData' error text")
+
+            case .failedResponse(statusCode: let code):
+                return NSLocalizedString("The request failed with HTTP status code: \(code)",
+                                         comment: "'.failedResponse' error text")
+
+            case .invalidOrEmptyUrlString:
+                return NSLocalizedString("The request URL string contains illegal characters or is an empty string.",
+                                         comment: "'.invalidOrEmptyUrlString' error text")
+
+            case .unexpectedResponse:
+                return NSLocalizedString("The response was not of the expected 'HTTPURLResponse' type.",
+                                         comment: "'.unexpectedResponse' error text")
+            }
+        }
+    }
+
     enum PublishType: String {
         case interests
         case users
@@ -29,7 +60,7 @@ struct NetworkService {
 
     func publishToInterests(_ interests: [String],
                             publishRequest: [String: Any],
-                            completion: @escaping (_ result: Result<String, Error>) -> Void) {
+                            completion: @escaping (_ result: Result<String, Swift.Error>) -> Void) {
         publish(to: interests,
                 type: .interests,
                 publishRequest: publishRequest,
@@ -40,7 +71,7 @@ struct NetworkService {
 
     func publishToUsers(_ users: [String],
                         publishRequest: [String: Any],
-                        completion: @escaping (_ result: Result<String, Error>) -> Void) {
+                        completion: @escaping (_ result: Result<String, Swift.Error>) -> Void) {
         publish(to: users,
                 type: .users,
                 publishRequest: publishRequest,
@@ -48,7 +79,7 @@ struct NetworkService {
     }
 
     func deleteUser(_ userId: String,
-                    completion: @escaping (_ result: Result<Void, Error>) -> Void) {
+                    completion: @escaping (_ result: Result<Void, Swift.Error>) -> Void) {
 
         do {
             let url = try endpointUrl(path: "/customer_api/v1/instances/\(instanceId)/users/\(userId)")
@@ -77,11 +108,7 @@ struct NetworkService {
         components.path = path
 
         guard let url = components.url else {
-            let errorMessage = """
-            [PushNotifications] - Error while constructing the URL.\nCheck that the URL string is not \
-            an empty string or string contains illegal characters.
-            """
-            throw PushNotificationsError.error(errorMessage)
+            throw Error.invalidOrEmptyUrlString
         }
 
         return url
@@ -90,7 +117,7 @@ struct NetworkService {
     private func publish(to objects: [String],
                          type: PublishType,
                          publishRequest: [String: Any],
-                         completion: @escaping (_ result: Result<String, Error>) -> Void) {
+                         completion: @escaping (_ result: Result<String, Swift.Error>) -> Void) {
 
         var mutablePublishRequest = publishRequest
         mutablePublishRequest[type.rawValue] = objects
@@ -128,24 +155,21 @@ struct NetworkService {
     }
 
     private func networkRequest(request: URLRequest,
-                                completion: @escaping (_ result: Result<Data, Error>) -> Void) {
+                                completion: @escaping (_ result: Result<Data, Swift.Error>) -> Void) {
         let sessionConfiguration = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfiguration)
 
         let dataTask = session.dataTask(with: request) { data, response, error in
             guard let data = data else {
-                let errorMessage = "[PushNotifications] - Publish request failed. `data` is nil."
-                return completion(.failure(PushNotificationsError.error(errorMessage)))
+                return completion(.failure(Error.emptyRepsonseData))
             }
             guard let httpURLResponse = response as? HTTPURLResponse else {
-                let errorMessage = "[PushNotifications] - Publish request failed. `httpURLResponse` is nil."
-                return completion(.failure(PushNotificationsError.error(errorMessage)))
+                return completion(.failure(Error.unexpectedResponse))
             }
 
             let statusCode = httpURLResponse.statusCode
             guard statusCode >= 200 && statusCode < 300, error == nil else {
-                let errorMessage = "[PushNotifications] - Request failed. HTTP status code: \(statusCode)"
-                return completion(.failure(PushNotificationsError.error(errorMessage)))
+                return completion(.failure(Error.failedResponse(statusCode: statusCode)))
             }
 
             completion(.success(data))
