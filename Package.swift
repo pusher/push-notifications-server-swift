@@ -12,7 +12,12 @@ let package = Package(
             targets: ["PushNotifications"])
     ],
     dependencies: [
-        .package(url: "https://github.com/IBM-Swift/Swift-JWT.git", from: "3.1.1")
+        // JWT support
+        .package(url: "https://github.com/IBM-Swift/Swift-JWT.git",
+                 .upToNextMajor(from: "3.1.1")),
+        // Source code linting
+        .package(url: "https://github.com/realm/SwiftLint",
+                 .upToNextMajor(from: "0.43.1")),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
