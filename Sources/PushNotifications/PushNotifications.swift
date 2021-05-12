@@ -22,7 +22,7 @@ public struct PushNotifications: JWTTokenGenerable {
     private let networkService: NetworkService
 
     private static let maxInterests: UInt = 100
-    private static let maxUserIdLength: UInt = 164
+    private static let maxInterestOrUserIdLength: UInt = 164
     private static let maxNumUserIdsWhenPublishing = 1000
 
     /**
@@ -99,9 +99,9 @@ public struct PushNotifications: JWTTokenGenerable {
             return completion(.failure(PushNotificationsError.interestsArrayContainsTooManyInterests(maxInterests: Self.maxInterests)))
         }
 
-        if !(interests.filter { $0.count > Self.maxUserIdLength }).isEmpty {
+        if interests.contains(where: { $0.count > Self.maxInterestOrUserIdLength }) {
             // swiftlint:disable:next line_length
-            return completion(.failure(PushNotificationsError.interestsArrayContainsAnInvalidInterest(maxCharacters: Self.maxUserIdLength)))
+            return completion(.failure(PushNotificationsError.interestsArrayContainsAnInvalidInterest(maxCharacters: Self.maxInterestOrUserIdLength)))
         }
 
         networkService.publishToInterests(interests,
@@ -154,7 +154,7 @@ public struct PushNotifications: JWTTokenGenerable {
     public func publishToUsers(_ users: [String],
                                _ publishRequest: [String: Any],
                                completion: @escaping (Result<String, Error>) -> Void) {
-        if users.count < 1 {
+        if users.isEmpty {
             let errorMessage = "[PushNotifications] - Must supply at least one user id."
             return completion(.failure(PushNotificationsError.error(errorMessage)))
         }
@@ -173,10 +173,10 @@ public struct PushNotifications: JWTTokenGenerable {
             return completion(.failure(PushNotificationsError.error(errorMessage)))
         }
 
-        let usersContainsUserIdWithInvalidLength = users.map { $0.count > Self.maxUserIdLength }.contains(true)
-        if usersContainsUserIdWithInvalidLength {
+        if users.contains(where: { $0.count > Self.maxInterestOrUserIdLength }) {
             let errorMessage = """
-            [PushNotifications] - User Id length too long (expected fewer than \(Self.maxUserIdLength + 1) characters)
+            [PushNotifications] - User Id length too long \
+            (expected fewer than \(Self.maxInterestOrUserIdLength + 1) characters)
             """
             return completion(.failure(PushNotificationsError.error(errorMessage)))
         }
@@ -213,14 +213,14 @@ public struct PushNotifications: JWTTokenGenerable {
     */
     public func generateToken(_ userId: String,
                               completion: @escaping (Result<[String: String], Error>) -> Void) {
-        if userId.count < 1 {
+        if userId.isEmpty {
             return completion(.failure(PushNotificationsError.error("User Id cannot be empty")))
         }
 
-        if userId.count > Self.maxUserIdLength {
+        if userId.count > Self.maxInterestOrUserIdLength {
             let errorMessage = """
             [PushNotifications] - User Id \(userId) length too long \
-            (expected fewer than \(Self.maxUserIdLength + 1) characters, got \(userId.count)
+            (expected fewer than \(Self.maxInterestOrUserIdLength + 1) characters, got \(userId.count)
             """
             return completion(.failure(PushNotificationsError.error(errorMessage)))
         }
@@ -266,14 +266,14 @@ public struct PushNotifications: JWTTokenGenerable {
     */
     public func deleteUser(_ userId: String,
                            completion: @escaping (Result<Void, Error>) -> Void) {
-        if userId.count < 1 {
+        if userId.isEmpty {
             return completion(.failure(PushNotificationsError.error("[PushNotifications] - User Id cannot be empty.")))
         }
 
-        if userId.count > Self.maxUserIdLength {
+        if userId.count > Self.maxInterestOrUserIdLength {
             let errorMessage = """
             [PushNotifications] - User Id \(userId) length too long \
-            (expected fewer than \(Self.maxUserIdLength + 1) characters, got \(userId.count)
+            (expected fewer than \(Self.maxInterestOrUserIdLength + 1) characters, got \(userId.count)
             """
             return completion(.failure(PushNotificationsError.error(errorMessage)))
         }
