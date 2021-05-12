@@ -27,7 +27,7 @@ final class PushNotificationsTests: XCTestCase {
                 exp.fulfill()
 
             case .error:
-                XCTFail()
+                XCTFail("Result should not contain an error.")
             }
         })
 
@@ -54,7 +54,7 @@ final class PushNotificationsTests: XCTestCase {
         pushNotifications.publishToInterests(interests, publishRequest, completion: { result in
             switch result {
             case .value:
-                XCTFail()
+                XCTFail("Result should not contain a value.")
 
             case .error(let error):
                 XCTAssertNotNil(error)
@@ -85,7 +85,7 @@ final class PushNotificationsTests: XCTestCase {
         pushNotifications.publishToInterests(interests, publishRequest, completion: { result in
             switch result {
             case .value:
-                XCTFail()
+                XCTFail("Result should not contain a value.")
 
             case .error(let error):
                 XCTAssertNotNil(error)
@@ -116,7 +116,7 @@ final class PushNotificationsTests: XCTestCase {
         pushNotifications.publishToInterests(interests, publishRequest, completion: { result in
             switch result {
             case .value:
-                XCTFail()
+                XCTFail("Result should not contain a value.")
 
             case .error(let error):
                 XCTAssertNotNil(error)
@@ -152,7 +152,7 @@ final class PushNotificationsTests: XCTestCase {
         pushNotifications.publishToInterests(interests, publishRequest, completion: { result in
             switch result {
             case .value:
-                XCTFail()
+                XCTFail("Result should not contain a value.")
 
             case .error(let error):
                 XCTAssertNotNil(error)
@@ -183,7 +183,7 @@ final class PushNotificationsTests: XCTestCase {
         pushNotifications.publishToInterests(interests, publishRequest, completion: { result in
             switch result {
             case .value:
-                XCTFail()
+                XCTFail("Result should not contain a value.")
 
             case .error(let error):
                 XCTAssertNotNil(error)
@@ -217,7 +217,7 @@ final class PushNotificationsTests: XCTestCase {
                 exp.fulfill()
 
             case .error:
-                XCTFail()
+                XCTFail("Result should not contain an error.")
             }
         })
 
@@ -243,7 +243,7 @@ final class PushNotificationsTests: XCTestCase {
         pushNotifications.publishToUsers([], publishRequest, completion: { result in
             switch result {
             case .value:
-                XCTFail()
+                XCTFail("Result should not contain a value.")
 
             case .error(let error):
                 XCTAssertNotNil(error)
@@ -273,7 +273,7 @@ final class PushNotificationsTests: XCTestCase {
         pushNotifications.publishToUsers([""], publishRequest, completion: { result in
             switch result {
             case .value:
-                XCTFail()
+                XCTFail("Result should not contain a value.")
 
             case .error(let error):
                 XCTAssertNotNil(error)
@@ -303,7 +303,7 @@ final class PushNotificationsTests: XCTestCase {
         pushNotifications.publishToUsers(["askdsakdjlksajkldjkajdksjkdjkjkjdkajksjkljkajkdsjkajkdjkoiwqjijiofiowenfioneiveniownvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoin"], publishRequest, completion: { result in
             switch result {
             case .value:
-                XCTFail()
+                XCTFail("Result should not contain a value.")
 
             case .error(let error):
                 XCTAssertNotNil(error)
@@ -339,7 +339,7 @@ final class PushNotificationsTests: XCTestCase {
         pushNotifications.publishToUsers(users, publishRequest, completion: { result in
             switch result {
             case .value:
-                XCTFail()
+                XCTFail("Result should not contain a value.")
 
             case .error(let error):
                 XCTAssertNotNil(error)
@@ -367,7 +367,7 @@ final class PushNotificationsTests: XCTestCase {
                 exp.fulfill()
 
             case .error:
-                XCTFail()
+                XCTFail("Result should not contain an error.")
             }
         })
 
@@ -385,7 +385,7 @@ final class PushNotificationsTests: XCTestCase {
         pushNotifications.generateToken("", completion: { result in
             switch result {
             case .value:
-                XCTFail()
+                XCTFail("Result should not contain a value.")
 
             case .error(let error):
                 XCTAssertNotNil(error)
@@ -407,7 +407,7 @@ final class PushNotificationsTests: XCTestCase {
         pushNotifications.generateToken("askdsakdjlksajkldjkajdksjkdjkjkjdkajksjkljkajkdsjkajkdjkoiwqjijiofiowenfioneiveniownvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoin", completion: { result in
             switch result {
             case .value:
-                XCTFail()
+                XCTFail("Result should not contain a value.")
 
             case .error(let error):
                 XCTAssertNotNil(error)
@@ -432,7 +432,7 @@ final class PushNotificationsTests: XCTestCase {
                 exp.fulfill()
 
             case .error:
-                XCTFail()
+                XCTFail("Result should not contain an error.")
             }
         })
 
@@ -450,7 +450,7 @@ final class PushNotificationsTests: XCTestCase {
         pushNotifications.deleteUser("", completion: { result in
             switch result {
             case .value:
-                XCTFail()
+                XCTFail("Result should not contain a value.")
 
             case .error(let error):
                 XCTAssertNotNil(error)
@@ -472,7 +472,7 @@ final class PushNotificationsTests: XCTestCase {
         pushNotifications.deleteUser("askdsakdjlksajkldjkajdksjkdjkjkjdkajksjkljkajkdsjkajkdjkoiwqjijiofiowenfioneiveniownvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoin", completion: { result in
             switch result {
             case .value:
-                XCTFail()
+                XCTFail("Result should not contain a value.")
 
             case .error(let error):
                 XCTAssertNotNil(error)
