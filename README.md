@@ -63,9 +63,9 @@ let publishRequest = [
 // Publish To Interests
 pushNotifications.publishToInterests(interests, publishRequest, completion: { result in
     switch result {
-    case .value(let publishId):
+    case .success(let publishId):
         print("\(publishId)")
-    case .error(let error):
+    case .failure(let error):
         print("\(error)")
     }
 })
@@ -73,9 +73,9 @@ pushNotifications.publishToInterests(interests, publishRequest, completion: { re
 // Publish To Users
 pushNotifications.publishToUsers(["jonathan", "jordan", "luís", "luka", "mina"], publishRequest, completion: { result in
     switch result {
-    case .value(let publishId):
+    case .success(let publishId):
         print("\(publishId)")
-    case .error(let error):
+    case .failure(let error):
         print("\(error)")
     }
 })
@@ -83,11 +83,11 @@ pushNotifications.publishToUsers(["jonathan", "jordan", "luís", "luka", "mina"]
 // Authenticate User
 pushNotifications.generateToken("Elmo", completion: { result in
     switch result {
-    case .value(let jwtToken):
+    case .success(let jwtToken):
         // 'jwtToken' is a Dictionary<String, String>
         // Example: ["token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWEiLCJleHAiOjE"]
         print("\(jwtToken)")
-    case .error(let error):
+    case .failure(let error):
         print("\(error)")
     }
 })
@@ -95,9 +95,9 @@ pushNotifications.generateToken("Elmo", completion: { result in
 // Delete User
 pushNotifications.deleteUser("Elmo", completion: { result in
     switch result {
-    case .value:
+    case .success:
         print("User deleted 👌")
-    case .error(let error):
+    case .failure(let error):
         print("\(error)")
     }
 })
