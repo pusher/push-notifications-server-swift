@@ -3,36 +3,6 @@ import Foundation
 import FoundationNetworking
 #endif
 
-/// Error thrown by PushNotifications.
-public enum PushNotificationsError: Error {
-    //// `instanceId` cannot be an empty String.
-    case instanceIdCannotBeAnEmptyString
-    //// `secretKey` cannot be an empty String.
-    case secretKeyCannotBeAnEmptyString
-    //// `interests` array cannot be empty.
-    case interestsArrayCannotBeEmpty
-
-    /**
-     General error.
-
-     - Parameter: error message.
-     */
-    case error(String)
-
-    /**
-    Interests array exceeded the number of maximum interests allowed.
-
-    - Parameter: maximum interests allowed value.
-    */
-    case interestsArrayContainsTooManyInterests(maxInterests: UInt)
-    /**
-    Interests array contains at least one or more invalid interests.
-
-    - Parameter: maximum characters allowed value.
-    */
-    case interestsArrayContainsAnInvalidInterest(maxCharacters: UInt)
-}
-
 public typealias CompletionHandler<T> = (_ result: T) -> Void
 
 public enum Result<Value, Error> {
@@ -56,7 +26,6 @@ public struct PushNotifications: JWTTokenGenerable {
     private let maxUserIdLength = 164
     private let maxNumUserIdsWhenPublishing = 1000
     private let tokenTTL = Int(Date().timeIntervalSince1970 + 24 * 60 * 60)
-    private let sdkVersion = "1.0.2"
 
     /**
      Creates a new `PushNotifications` instance.
