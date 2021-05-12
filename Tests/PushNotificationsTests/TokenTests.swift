@@ -13,13 +13,13 @@ final class TokenTests: XCTestCase {
 
         pushNotifications.generateToken("aaa") { result in
             switch result {
-            case .value(let jwtToken):
+            case .success(let jwtToken):
                 // 'jwtToken' is a Dictionary<String, String>
                 // Example: ["token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWEiLCJleHAiOjE"]
                 XCTAssertNotNil(jwtToken)
                 exp.fulfill()
 
-            case .error:
+            case .failure:
                 XCTFail("Result should not contain an error.")
             }
         }
@@ -37,10 +37,10 @@ final class TokenTests: XCTestCase {
 
         pushNotifications.generateToken("") { result in
             switch result {
-            case .value:
+            case .success:
                 XCTFail("Result should not contain a value.")
 
-            case .error(let error):
+            case .failure(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
             }
@@ -64,10 +64,10 @@ final class TokenTests: XCTestCase {
         niowenviwniwvnienoin
         """) { result in
             switch result {
-            case .value:
+            case .success:
                 XCTFail("Result should not contain a value.")
 
-            case .error(let error):
+            case .failure(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
             }

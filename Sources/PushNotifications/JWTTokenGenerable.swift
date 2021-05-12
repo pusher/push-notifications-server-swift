@@ -16,9 +16,9 @@ extension JWTTokenGenerable {
         do {
             let jwt = JWT(claims: JWTClaims(sub: payload.sub, exp: payload.exp, iss: payload.iss))
             let jwtTokenString = try jwtEncoder.encodeToString(jwt)
-            completion(.value(jwtTokenString))
+            completion(.success(jwtTokenString))
         } catch {
-            completion(.error(error))
+            completion(.failure(error))
         }
     }
 }

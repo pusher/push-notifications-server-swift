@@ -58,15 +58,15 @@ struct NetworkService {
 
             networkRequest(request: request) { result in
                 switch result {
-                case .value:
-                    completion(.value(()))
+                case .success:
+                    completion(.success(()))
 
-                case .error(let error):
-                    completion(.error(error))
+                case .failure(let error):
+                    completion(.failure(error))
                 }
             }
         } catch {
-            completion(.error(error))
+            completion(.failure(error))
         }
     }
 
@@ -110,20 +110,20 @@ struct NetworkService {
 
             networkRequest(request: request) { result in
                 switch result {
-                case .value(let deviceData):
+                case .success(let deviceData):
                     do {
                         let publishResponse = try JSONDecoder().decode(PublishResponse.self, from: deviceData)
-                        completion(.value(publishResponse.id))
+                        completion(.success(publishResponse.id))
                     } catch {
-                        completion(.error(error))
+                        completion(.failure(error))
                     }
 
-                case .error(let error):
-                    completion(.error(error))
+                case .failure(let error):
+                    completion(.failure(error))
                 }
             }
         } catch {
-            completion(.error(error))
+            completion(.failure(error))
         }
     }
 
@@ -135,20 +135,20 @@ struct NetworkService {
         let dataTask = session.dataTask(with: request) { data, response, error in
             guard let data = data else {
                 let errorMessage = "[PushNotifications] - Publish request failed. `data` is nil."
-                return completion(.error(PushNotificationsError.error(errorMessage)))
+                return completion(.failure(PushNotificationsError.error(errorMessage)))
             }
             guard let httpURLResponse = response as? HTTPURLResponse else {
                 let errorMessage = "[PushNotifications] - Publish request failed. `httpURLResponse` is nil."
-                return completion(.error(PushNotificationsError.error(errorMessage)))
+                return completion(.failure(PushNotificationsError.error(errorMessage)))
             }
 
             let statusCode = httpURLResponse.statusCode
             guard statusCode >= 200 && statusCode < 300, error == nil else {
                 let errorMessage = "[PushNotifications] - Request failed. HTTP status code: \(statusCode)"
-                return completion(.error(PushNotificationsError.error(errorMessage)))
+                return completion(.failure(PushNotificationsError.error(errorMessage)))
             }
 
-            completion(.value(data))
+            completion(.success(data))
         }
 
         dataTask.resume()

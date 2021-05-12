@@ -22,10 +22,10 @@ final class InterestsTests: XCTestCase {
 
         pushNotifications.publishToInterests(interests, publishRequest) { result in
             switch result {
-            case .value:
+            case .success:
                 XCTFail("Result should not contain a value.")
 
-            case .error(let error):
+            case .failure(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
             }
@@ -58,10 +58,10 @@ final class InterestsTests: XCTestCase {
 
         pushNotifications.publishToInterests(interests, publishRequest) { result in
             switch result {
-            case .value:
+            case .success:
                 XCTFail("Result should not contain a value.")
 
-            case .error(let error):
+            case .failure(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
             }
@@ -93,10 +93,10 @@ final class InterestsTests: XCTestCase {
 
         pushNotifications.publishToInterests(interests, publishRequest) { result in
             switch result {
-            case .value:
+            case .success:
                 XCTFail("Result should not contain a value.")
 
-            case .error(let error):
+            case .failure(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
             }

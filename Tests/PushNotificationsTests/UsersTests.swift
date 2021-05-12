@@ -26,11 +26,11 @@ final class UsersTests: XCTestCase {
                                           "mina"],
                                          publishRequest) { result in
             switch result {
-            case .value(let publishId):
+            case .success(let publishId):
                 XCTAssertNotNil(publishId)
                 exp.fulfill()
 
-            case .error:
+            case .failure:
                 XCTFail("Result should not contain an error.")
             }
         }
@@ -56,10 +56,10 @@ final class UsersTests: XCTestCase {
 
         pushNotifications.publishToUsers([], publishRequest) { result in
             switch result {
-            case .value:
+            case .success:
                 XCTFail("Result should not contain a value.")
 
-            case .error(let error):
+            case .failure(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
             }
@@ -86,10 +86,10 @@ final class UsersTests: XCTestCase {
 
         pushNotifications.publishToUsers([""], publishRequest) { result in
             switch result {
-            case .value:
+            case .success:
                 XCTFail("Result should not contain a value.")
 
-            case .error(let error):
+            case .failure(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
             }
@@ -121,10 +121,10 @@ final class UsersTests: XCTestCase {
         veiniowenviwniwvnienoin
         """], publishRequest) { result in
             switch result {
-            case .value:
+            case .success:
                 XCTFail("Result should not contain a value.")
 
-            case .error(let error):
+            case .failure(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
             }
@@ -157,10 +157,10 @@ final class UsersTests: XCTestCase {
 
         pushNotifications.publishToUsers(users, publishRequest) { result in
             switch result {
-            case .value:
+            case .success:
                 XCTFail("Result should not contain a value.")
 
-            case .error(let error):
+            case .failure(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
             }
@@ -179,10 +179,10 @@ final class UsersTests: XCTestCase {
 
         pushNotifications.deleteUser("aaa") { result in
             switch result {
-            case .value:
+            case .success:
                 exp.fulfill()
 
-            case .error:
+            case .failure:
                 XCTFail("Result should not contain an error.")
             }
         }
@@ -200,10 +200,10 @@ final class UsersTests: XCTestCase {
 
         pushNotifications.deleteUser("") { result in
             switch result {
-            case .value:
+            case .success:
                 XCTFail("Result should not contain a value.")
 
-            case .error(let error):
+            case .failure(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
             }
@@ -227,10 +227,10 @@ final class UsersTests: XCTestCase {
         wniveiniowenviwniwvnienoin
         """) { result in
             switch result {
-            case .value:
+            case .success:
                 XCTFail("Result should not contain a value.")
 
-            case .error(let error):
+            case .failure(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
             }
