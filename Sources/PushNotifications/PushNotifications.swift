@@ -52,7 +52,7 @@ public struct PushNotifications: JWTTokenGenerable {
     private let instanceId: String
     /// Pusher Beams Secret Key
     private let secretKey: String
-    
+
     private let maxUserIdLength = 164
     private let maxNumUserIdsWhenPublishing = 1000
     private let tokenTTL = Int(Date().timeIntervalSince1970 + 24 * 60 * 60)
@@ -113,6 +113,7 @@ public struct PushNotifications: JWTTokenGenerable {
             switch result {
             case .value(let deviceId):
                 completion(deviceId)
+
             case .error(let error):
                 /**
                  Communicationg errors by returning an empty string is not ideal.
@@ -197,27 +198,26 @@ public struct PushNotifications: JWTTokenGenerable {
 
         var mutablePublishRequest = publishRequest
         mutablePublishRequest["interests"] = interests
-        
+
         do {
             let httpBody = try JSONSerialization.data(withJSONObject: mutablePublishRequest)
             let request = setRequest(url: url, httpMethod: "POST", body: httpBody)
-            
+
             networkRequest(request: request) { result in
                 switch result {
                 case .value(let deviceData):
                     do {
                         let publishResponse = try JSONDecoder().decode(PublishResponse.self, from: deviceData)
                         completion(.value(publishResponse.id))
-                    }
-                    catch {
+                    } catch {
                         completion(.error(error))
                     }
+
                 case .error(let error):
                     completion(.error(error))
                 }
             }
-        }
-        catch {
+        } catch {
             completion(.error(error))
         }
     }
@@ -268,49 +268,48 @@ public struct PushNotifications: JWTTokenGenerable {
         if users.count < 1 {
             return completion(.error(PushNotificationsError.error("[PushNotifications] - Must supply at least one user id.")))
         }
-        
+
         if users.count > maxNumUserIdsWhenPublishing {
             return completion(.error(PushNotificationsError.error("[PushNotifications] - Too many user ids supplied. API supports up to \(maxNumUserIdsWhenPublishing), got \(users.count)")))
         }
-        
+
         let usersArrayContainsAnEmptyString = users.contains("")
         if usersArrayContainsAnEmptyString {
             return completion(.error(PushNotificationsError.error("[PushNotifications] - Empty user ids are not valid.")))
         }
-        
+
         let usersArrayContainsUserIdWithInvalidLength = users.map { $0.count > maxUserIdLength }.contains(true)
         if usersArrayContainsUserIdWithInvalidLength {
             return completion(.error(PushNotificationsError.error("[PushNotifications] - User Id length too long (expected fewer than \(maxUserIdLength+1) characters)")))
         }
-        
+
         let urlString = "https://\(instanceId).pushnotifications.pusher.com/publish_api/v1/instances/\(instanceId)/publishes/users"
         guard let url = URL(string: urlString) else {
             return completion(.error(PushNotificationsError.error("[PushNotifications] - Error while constructing the URL.\nCheck that the URL string is not an empty string or string contains illegal characters.")))
         }
-        
+
         var mutablePublishRequest = publishRequest
         mutablePublishRequest["users"] = users
-        
+
         do {
             let httpBody = try JSONSerialization.data(withJSONObject: mutablePublishRequest)
             let request = setRequest(url: url, httpMethod: "POST", body: httpBody)
-            
+
             networkRequest(request: request) { result in
                 switch result {
                 case .value(let publishData):
                     do {
                         let publishResponse = try JSONDecoder().decode(PublishResponse.self, from: publishData)
                         completion(.value(publishResponse.id))
-                    }
-                    catch {
+                    } catch {
                         completion(.error(error))
                     }
+
                 case .error(let error):
                     completion(.error(error))
                 }
             }
-        }
-        catch {
+        } catch {
             completion(.error(error))
         }
     }
@@ -340,7 +339,7 @@ public struct PushNotifications: JWTTokenGenerable {
     })
     ````
     */
-    public func generateToken(_ userId: String, completion: @escaping CompletionHandler<Result<Dictionary<String, String>, Error>>) {
+    public func generateToken(_ userId: String, completion: @escaping CompletionHandler<Result<[String: String], Error>>) {
         if userId.count < 1 {
             return completion(.error(PushNotificationsError.error("User Id cannot be empty")))
         }
@@ -354,6 +353,7 @@ public struct PushNotifications: JWTTokenGenerable {
             switch result {
             case .value(let jwtTokenString):
                 completion(.value(["token": jwtTokenString]))
+
             case .error(let error):
                 completion(.error(error))
             }
@@ -389,51 +389,52 @@ public struct PushNotifications: JWTTokenGenerable {
         if userId.count < 1 {
             return completion(.error(PushNotificationsError.error("[PushNotifications] - User Id cannot be empty.")))
         }
-        
+
         if userId.count > maxUserIdLength {
             return completion(.error(PushNotificationsError.error("[PushNotifications] - User Id \(userId) length too long (expected fewer than \(maxUserIdLength+1) characters, got \(userId.count)")))
         }
-        
+
         let urlString = "https://\(instanceId).pushnotifications.pusher.com/customer_api/v1/instances/\(instanceId)/users/\(userId)"
         guard let url = URL(string: urlString) else {
             return completion(.error(PushNotificationsError.error("[PushNotifications] - Error while constructing the URL.\nCheck that the URL string is not an empty string or string contains illegal characters.")))
         }
-        
+
         let request = setRequest(url: url, httpMethod: "DELETE")
-        
+
         networkRequest(request: request) { result in
             switch result {
             case .value:
                 completion(.value(()))
+
             case .error(let error):
                 completion(.error(error))
             }
         }
     }
-    
+
     private func networkRequest(request: URLRequest, completion: @escaping (_ result: Result<Data, Error>) -> Void) {
         let sessionConfiguration = URLSessionConfiguration.default
-        let session = URLSession.init(configuration: sessionConfiguration)
-        
-        let dataTask = session.dataTask(with: request) { (data, response, error) in
+        let session = URLSession(configuration: sessionConfiguration)
+
+        let dataTask = session.dataTask(with: request) { data, response, error in
             guard let data = data else {
                 return completion(.error(PushNotificationsError.error("[PushNotifications] - Publish request failed. `data` is nil.")))
             }
             guard let httpURLResponse = response as? HTTPURLResponse else {
                 return completion(.error(PushNotificationsError.error("[PushNotifications] - Publish request failed. `httpURLResponse` is nil.")))
             }
-            
+
             let statusCode = httpURLResponse.statusCode
             guard statusCode >= 200 && statusCode < 300, error == nil else {
                 return completion(.error(PushNotificationsError.error("[PushNotifications] - Request failed. HTTP status code: \(statusCode)")))
             }
-            
+
             completion(.value(data))
         }
-        
+
         dataTask.resume()
     }
-    
+
     private func setRequest(url: URL, httpMethod: String, body: Data? = nil) -> URLRequest {
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Accept")
@@ -442,14 +443,14 @@ public struct PushNotifications: JWTTokenGenerable {
         request.setValue("push-notifications-server-swift \(sdkVersion)", forHTTPHeaderField: "X-Pusher-Library")
         request.httpMethod = httpMethod
         request.httpBody = body
-        
+
         return request
     }
 }
 
 private struct PublishResponse: Decodable {
     let id: String
-    
+
     enum CodingKeys: String, CodingKey {
         case id = "publishId"
     }

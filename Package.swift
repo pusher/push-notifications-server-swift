@@ -16,7 +16,7 @@ let package = Package(
                  .upToNextMajor(from: "3.1.1")),
         // Source code linting
         .package(url: "https://github.com/realm/SwiftLint",
-                 .upToNextMajor(from: "0.43.1")),
+                 .upToNextMajor(from: "0.43.1"))
     ],
     targets: [
         .target(

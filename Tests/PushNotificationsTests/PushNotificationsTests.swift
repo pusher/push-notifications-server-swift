@@ -1,5 +1,5 @@
-import XCTest
 @testable import PushNotifications
+import XCTest
 
 final class PushNotificationsTests: XCTestCase {
 
@@ -25,6 +25,7 @@ final class PushNotificationsTests: XCTestCase {
             case .value(let publishId):
                 XCTAssertNotNil(publishId)
                 exp.fulfill()
+
             case .error:
                 XCTFail()
             }
@@ -54,6 +55,7 @@ final class PushNotificationsTests: XCTestCase {
             switch result {
             case .value:
                 XCTFail()
+
             case .error(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
@@ -84,6 +86,7 @@ final class PushNotificationsTests: XCTestCase {
             switch result {
             case .value:
                 XCTFail()
+
             case .error(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
@@ -114,6 +117,7 @@ final class PushNotificationsTests: XCTestCase {
             switch result {
             case .value:
                 XCTFail()
+
             case .error(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
@@ -149,6 +153,7 @@ final class PushNotificationsTests: XCTestCase {
             switch result {
             case .value:
                 XCTFail()
+
             case .error(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
@@ -179,6 +184,7 @@ final class PushNotificationsTests: XCTestCase {
             switch result {
             case .value:
                 XCTFail()
+
             case .error(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
@@ -209,6 +215,7 @@ final class PushNotificationsTests: XCTestCase {
             case .value(let publishId):
                 XCTAssertNotNil(publishId)
                 exp.fulfill()
+
             case .error:
                 XCTFail()
             }
@@ -237,6 +244,7 @@ final class PushNotificationsTests: XCTestCase {
             switch result {
             case .value:
                 XCTFail()
+
             case .error(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
@@ -266,6 +274,7 @@ final class PushNotificationsTests: XCTestCase {
             switch result {
             case .value:
                 XCTFail()
+
             case .error(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
@@ -295,6 +304,7 @@ final class PushNotificationsTests: XCTestCase {
             switch result {
             case .value:
                 XCTFail()
+
             case .error(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
@@ -317,7 +327,7 @@ final class PushNotificationsTests: XCTestCase {
                 ]
             ]
         ]
-        
+
         var users: [String] = []
 
         for _ in 0...1000 {
@@ -330,6 +340,7 @@ final class PushNotificationsTests: XCTestCase {
             switch result {
             case .value:
                 XCTFail()
+
             case .error(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
@@ -344,7 +355,7 @@ final class PushNotificationsTests: XCTestCase {
         let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
 
         let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-    
+
         let exp = expectation(description: "It should successfully authenticate the user.")
 
         pushNotifications.generateToken("aaa", completion: { result in
@@ -354,6 +365,7 @@ final class PushNotificationsTests: XCTestCase {
                 // Example: ["token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWEiLCJleHAiOjE"]
                 XCTAssertNotNil(jwtToken)
                 exp.fulfill()
+
             case .error:
                 XCTFail()
             }
@@ -367,13 +379,14 @@ final class PushNotificationsTests: XCTestCase {
         let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
 
         let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-    
+
         let exp = expectation(description: "It should return an error.")
 
         pushNotifications.generateToken("", completion: { result in
             switch result {
             case .value:
                 XCTFail()
+
             case .error(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
@@ -388,13 +401,14 @@ final class PushNotificationsTests: XCTestCase {
         let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
 
         let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-    
+
         let exp = expectation(description: "It should return an error.")
 
         pushNotifications.generateToken("askdsakdjlksajkldjkajdksjkdjkjkjdkajksjkljkajkdsjkajkdjkoiwqjijiofiowenfioneiveniownvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoin", completion: { result in
             switch result {
             case .value:
                 XCTFail()
+
             case .error(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
@@ -409,13 +423,14 @@ final class PushNotificationsTests: XCTestCase {
         let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
 
         let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-    
+
         let exp = expectation(description: "It should successfully delete the user.")
 
         pushNotifications.deleteUser("aaa", completion: { result in
             switch result {
             case .value:
                 exp.fulfill()
+
             case .error:
                 XCTFail()
             }
@@ -429,13 +444,14 @@ final class PushNotificationsTests: XCTestCase {
         let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
 
         let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-    
+
         let exp = expectation(description: "It should return an error.")
 
         pushNotifications.deleteUser("", completion: { result in
             switch result {
             case .value:
                 XCTFail()
+
             case .error(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
@@ -450,13 +466,14 @@ final class PushNotificationsTests: XCTestCase {
         let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
 
         let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-    
+
         let exp = expectation(description: "It should return an error.")
 
         pushNotifications.deleteUser("askdsakdjlksajkldjkajdksjkdjkjkjdkajksjkljkajkdsjkajkdjkoiwqjijiofiowenfioneiveniownvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoin", completion: { result in
             switch result {
             case .value:
                 XCTFail()
+
             case .error(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
