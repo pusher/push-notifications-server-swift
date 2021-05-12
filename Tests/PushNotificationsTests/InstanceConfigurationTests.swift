@@ -22,11 +22,11 @@ final class InstanceConfigurationTests: XCTestCase {
 
         pushNotifications.publishToInterests(interests, publishRequest) { result in
             switch result {
-            case .value(let publishId):
+            case .success(let publishId):
                 XCTAssertNotNil(publishId)
                 exp.fulfill()
 
-            case .error:
+            case .failure:
                 XCTFail("Result should not contain an error.")
             }
         }
@@ -53,10 +53,10 @@ final class InstanceConfigurationTests: XCTestCase {
 
         pushNotifications.publishToInterests(interests, publishRequest) { result in
             switch result {
-            case .value:
+            case .success:
                 XCTFail("Result should not contain a value.")
 
-            case .error(let error):
+            case .failure(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
             }
@@ -84,10 +84,10 @@ final class InstanceConfigurationTests: XCTestCase {
 
         pushNotifications.publishToInterests(interests, publishRequest) { result in
             switch result {
-            case .value:
+            case .success:
                 XCTFail("Result should not contain a value.")
 
-            case .error(let error):
+            case .failure(let error):
                 XCTAssertNotNil(error)
                 exp.fulfill()
             }
