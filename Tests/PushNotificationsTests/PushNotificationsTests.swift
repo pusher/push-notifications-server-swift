@@ -482,24 +482,4 @@ final class PushNotificationsTests: XCTestCase {
 
         waitForExpectations(timeout: 3)
     }
-
-    static var allTests = [
-        ("testValidInstance", testValidInstance),
-        ("testInstanceIdShouldNotBeEmptyString", testInstanceIdShouldNotBeEmptyString),
-        ("testSecretKeyShouldNotBeEmptyString", testSecretKeyShouldNotBeEmptyString),
-        ("testInterestsArrayShouldNotBeEmpty", testInterestsArrayShouldNotBeEmpty),
-        ("testInterestsArrayShouldContainMaximumOf100Interests", testInterestsArrayShouldContainMaximumOf100Interests),
-        ("testInterestInTheArrayIsTooLong", testInterestInTheArrayIsTooLong),
-        ("testValidPublishToUsers", testValidPublishToUsers),
-        ("testPublishToUsersRequiresAtLeastOneUser", testPublishToUsersRequiresAtLeastOneUser),
-        ("testPublishToUsersUserShouldNotBeAnEmptyString", testPublishToUsersUserShouldNotBeAnEmptyString),
-        ("testPublishToUsersUsernameShouldBeLessThan165Characters", testPublishToUsersUsernameShouldBeLessThan165Characters),
-        ("testPublishToMoreThan1000UsersShouldFail", testPublishToMoreThan1000UsersShouldFail),
-        ("testItShouldAuthenticateTheUserSuccessfully", testItShouldAuthenticateTheUserSuccessfully),
-        ("testItShouldFailToGenerateTokenWithEmptyId", testItShouldFailToGenerateTokenWithEmptyId),
-        ("testItShouldFailToGenerateTokenWithIdThatIsTooLong", testItShouldFailToGenerateTokenWithIdThatIsTooLong),
-        ("testItShouldDeleteTheUserSuccessfully", testItShouldDeleteTheUserSuccessfully),
-        ("testItShouldFailToDeleteUserWithEmptyId", testItShouldFailToDeleteUserWithEmptyId),
-        ("testItShouldFailToDeleteUserWithIdThatIsTooLong", testItShouldFailToDeleteUserWithIdThatIsTooLong)
-    ]
 }
