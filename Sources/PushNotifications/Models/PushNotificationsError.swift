@@ -58,7 +58,9 @@ public enum PushNotificationsError: LocalizedError {
                                      comment: "'.interestsArrayCannotBeEmpty' error text")
 
         case .interestsArrayContainsAnInvalidInterest(maxCharacters: let maxCharacters):
-            return NSLocalizedString("The 'interests' array contains at least one interest longer than \(maxCharacters) characters.",
+            return NSLocalizedString("""
+            The 'interests' array contains at least one interest longer than \(maxCharacters) characters.
+            """,
                                      comment: "'.interestsArrayContainsAnInvalidInterest' error text")
 
         case .interestsArrayContainsTooManyInterests(maxInterests: let maxInterests):
@@ -82,7 +84,9 @@ public enum PushNotificationsError: LocalizedError {
                                      comment: "'.usersArrayCannotContainEmptyString' error text")
 
         case .usersArrayContainsAnInvalidUser(maxCharacters: let maxCharacters):
-            return NSLocalizedString("The 'users' array contains at least one user ID longer than \(maxCharacters) characters.",
+            return NSLocalizedString("""
+            The 'users' array contains at least one user ID longer than \(maxCharacters) characters.
+            """,
                                      comment: "'.usersArrayContainsAnInvalidUser' error text")
 
         case .usersArrayContainsTooManyUsers(maxUsers: let maxUsers):
@@ -102,7 +106,8 @@ public enum PushNotificationsError: LocalizedError {
 
 extension PushNotificationsError {
 
-    /// Creates a `PushNotificationsError` which wraps another `Error`, offering additional context if it can be determined.
+    /// Creates a `PushNotificationsError` which wraps another `Error`,
+    /// offering additional context if it can be determined.
     /// - Parameter error: The `Error` to wrap inside the resulting `PushNotificationsError`.
     init(from error: Error) {
 
