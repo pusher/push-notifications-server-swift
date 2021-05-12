@@ -161,6 +161,7 @@ public struct PushNotifications: JWTTokenGenerable {
         }
 
         if interests.count > 100 {
+            // swiftlint:disable:next line_length
             return completion(.failure(PushNotificationsError.interestsArrayContainsTooManyInterests(maxInterests: 100)))
         }
 
