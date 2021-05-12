@@ -24,7 +24,6 @@ public struct PushNotifications: JWTTokenGenerable {
     private static let maxInterests: UInt = 100
     private static let maxUserIdLength: UInt = 164
     private static let maxNumUserIdsWhenPublishing = 1000
-    private let tokenTTL = Int(Date().timeIntervalSince1970 + 24 * 60 * 60)
 
     /**
      Creates a new `PushNotifications` instance.
@@ -227,7 +226,6 @@ public struct PushNotifications: JWTTokenGenerable {
         }
 
         let jwtPayload = JWTPayload(sub: userId,
-                                    exp: tokenTTL,
                                     iss: networkService.host,
                                     key: secretKey)
         jwtTokenString(payload: jwtPayload) { result in
