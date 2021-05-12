@@ -3,8 +3,6 @@ import Foundation
 import FoundationNetworking
 #endif
 
-public typealias CompletionHandler<T> = (_ result: T) -> Void
-
 /**
 PushNotifications struct implements publish method
 that is used to publish push notifications to specified interests.
@@ -147,7 +145,7 @@ public struct PushNotifications: JWTTokenGenerable {
     */
     public func publishToInterests(_ interests: [String],
                                    _ publishRequest: [String: Any],
-                                   completion: @escaping CompletionHandler<Result<String, Error>>) {
+                                   completion: @escaping (Result<String, Error>) -> Void) {
         if instanceId.isEmpty {
             return completion(.failure(PushNotificationsError.instanceIdCannotBeAnEmptyString))
         }
@@ -219,7 +217,7 @@ public struct PushNotifications: JWTTokenGenerable {
     */
     public func publishToUsers(_ users: [String],
                                _ publishRequest: [String: Any],
-                               completion: @escaping CompletionHandler<Result<String, Error>>) {
+                               completion: @escaping (Result<String, Error>) -> Void) {
         if users.count < 1 {
             let errorMessage = "[PushNotifications] - Must supply at least one user id."
             return completion(.failure(PushNotificationsError.error(errorMessage)))
@@ -278,7 +276,7 @@ public struct PushNotifications: JWTTokenGenerable {
     ````
     */
     public func generateToken(_ userId: String,
-                              completion: @escaping CompletionHandler<Result<[String: String], Error>>) {
+                              completion: @escaping (Result<[String: String], Error>) -> Void) {
         if userId.count < 1 {
             return completion(.failure(PushNotificationsError.error("User Id cannot be empty")))
         }
@@ -332,7 +330,7 @@ public struct PushNotifications: JWTTokenGenerable {
     ````
     */
     public func deleteUser(_ userId: String,
-                           completion: @escaping CompletionHandler<Result<Void, Error>>) {
+                           completion: @escaping (Result<Void, Error>) -> Void) {
         if userId.count < 1 {
             return completion(.failure(PushNotificationsError.error("[PushNotifications] - User Id cannot be empty.")))
         }

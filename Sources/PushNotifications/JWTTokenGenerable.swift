@@ -6,11 +6,11 @@ import FoundationNetworking
 import SwiftJWT
 
 protocol JWTTokenGenerable {
-    func jwtTokenString(payload: JWTPayload, completion: @escaping CompletionHandler<Result<String, Error>>)
+    func jwtTokenString(payload: JWTPayload, completion: @escaping (Result<String, Error>) -> Void)
 }
 
 extension JWTTokenGenerable {
-    func jwtTokenString(payload: JWTPayload, completion: @escaping CompletionHandler<Result<String, Error>>) {
+    func jwtTokenString(payload: JWTPayload, completion: @escaping (Result<String, Error>) -> Void) {
         let key = payload.key.data(using: .utf8)!
         let jwtEncoder = JWTEncoder(jwtSigner: JWTSigner.hs256(key: key))
         do {
