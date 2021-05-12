@@ -5,21 +5,8 @@ import FoundationNetworking
 
 import SwiftJWT
 
-public struct JWTPayload {
-    let sub: String
-    let exp: Int
-    let iss: String
-    let key: String
-}
-
 protocol JWTTokenGenerable {
     func jwtTokenString(payload: JWTPayload, completion: @escaping CompletionHandler<Result<String, Error>>)
-}
-
-private struct JWTClaims: Claims {
-    let sub: String
-    let exp: Int // not a `Date` because the service currently doesn't support `NumericDate`
-    let iss: String
 }
 
 extension JWTTokenGenerable {
