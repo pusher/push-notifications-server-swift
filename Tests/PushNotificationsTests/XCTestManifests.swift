@@ -20,6 +20,7 @@ extension InterestsTests {
         ("testInterestInTheArrayIsTooLong", testInterestInTheArrayIsTooLong),
         ("testInterestsArrayShouldContainMaximumOf100Interests", testInterestsArrayShouldContainMaximumOf100Interests),
         ("testInterestsArrayShouldNotBeEmpty", testInterestsArrayShouldNotBeEmpty),
+        ("testInterestsArrayShouldNotContainAnEmptyString", testInterestsArrayShouldNotContainAnEmptyString),
     ]
 }
 

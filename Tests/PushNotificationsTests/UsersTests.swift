@@ -4,238 +4,104 @@ import XCTest
 final class UsersTests: XCTestCase {
 
     func testValidPublishToUsers() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+        let exp = XCTestExpectation(function: #function)
 
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
-        let publishRequest = [
-            "apns": [
-                "aps": [
-                    "alert": "hi"
-                ]
-            ]
-        ]
-
-        let exp = expectation(description: "It should successfully publish to users.")
-
-        pushNotifications.publishToUsers(["jonathan",
-                                          "jordan",
-                                          "luís",
-                                          "luka",
-                                          "mina"],
-                                         publishRequest) { result in
-            switch result {
-            case .success(let publishId):
+        TestObjects.Client.shared.publishToUsers(TestObjects.UserIDs.validArray,
+                                                 TestObjects.Publish.publishRequest) { result in
+            self.verifyAPIResultSuccess(result, expectation: exp) { publishId in
                 XCTAssertNotNil(publishId)
-                exp.fulfill()
-
-            case .failure:
-                XCTFail("Result should not contain an error.")
             }
         }
 
-        waitForExpectations(timeout: 3)
+        wait(for: [exp], timeout: 3)
     }
 
     func testPublishToUsersRequiresAtLeastOneUser() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+        let exp = XCTestExpectation(function: #function)
 
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
-        let publishRequest = [
-            "apns": [
-                "aps": [
-                    "alert": "hi"
-                ]
-            ]
-        ]
-
-        let exp = expectation(description: "It should return an error.")
-
-        pushNotifications.publishToUsers([], publishRequest) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should not contain a value.")
-
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
+        TestObjects.Client.shared.publishToUsers(TestObjects.UserIDs.emptyArray,
+                                                 TestObjects.Publish.publishRequest) { result in
+            self.verifyAPIResultFailure(result,
+                                        expectation: exp,
+                                        expectedError: .usersArrayCannotBeEmpty)
         }
 
-        waitForExpectations(timeout: 3)
+        wait(for: [exp], timeout: 3)
     }
 
     func testPublishToUsersUserShouldNotBeAnEmptyString() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+        let exp = XCTestExpectation(function: #function)
 
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
-        let publishRequest = [
-            "apns": [
-                "aps": [
-                    "alert": "hi"
-                ]
-            ]
-        ]
-
-        let exp = expectation(description: "It should return an error.")
-
-        pushNotifications.publishToUsers([""], publishRequest) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should not contain a value.")
-
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
+        TestObjects.Client.shared.publishToUsers([TestObjects.UserIDs.emptyString],
+                                                 TestObjects.Publish.publishRequest) { result in
+            self.verifyAPIResultFailure(result,
+                                        expectation: exp,
+                                        expectedError: .usersArrayCannotContainEmptyString)
         }
 
-        waitForExpectations(timeout: 3)
+        wait(for: [exp], timeout: 3)
     }
 
     func testPublishToUsersUsernameShouldBeLessThan165Characters() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+        let exp = XCTestExpectation(function: #function)
 
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
-        let publishRequest = [
-            "apns": [
-                "aps": [
-                    "alert": "hi"
-                ]
-            ]
-        ]
-
-        let exp = expectation(description: "It should return an error.")
-
-        pushNotifications.publishToUsers(["""
-        askdsakdjlksajkldjkajdksjkdjkjkjdkajksjkljkajkdsjkajkdjkoiwqjijiofiowenfioneivenio\
-        wnvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwi\
-        nvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioiwni\
-        veiniowenviwniwvnienoin
-        """], publishRequest) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should not contain a value.")
-
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
+        TestObjects.Client.shared.publishToUsers([TestObjects.UserIDs.tooLong],
+                                                 TestObjects.Publish.publishRequest) { result in
+            self.verifyAPIResultFailure(result,
+                                        expectation: exp,
+                                        expectedError: .usersArrayContainsAnInvalidUser(maxCharacters: 164))
         }
 
-        waitForExpectations(timeout: 3)
+        wait(for: [exp], timeout: 3)
     }
 
     func testPublishToMoreThan1000UsersShouldFail() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+        let exp = XCTestExpectation(function: #function)
 
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
-        let publishRequest = [
-            "apns": [
-                "aps": [
-                    "alert": "hi"
-                ]
-            ]
-        ]
-
-        var users: [String] = []
-
-        for _ in 0...1000 {
-            users.append("a")
+        TestObjects.Client.shared.publishToUsers(TestObjects.UserIDs.tooMany,
+                                                 TestObjects.Publish.publishRequest) { result in
+            let error = PushNotificationsError.internalError(NetworkService.Error.failedResponse(statusCode: 422))
+            self.verifyAPIResultFailure(result,
+                                        expectation: exp,
+                                        expectedError: error)
         }
 
-        let exp = expectation(description: "It should return an error.")
-
-        pushNotifications.publishToUsers(users, publishRequest) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should not contain a value.")
-
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
-        }
-
-        waitForExpectations(timeout: 3)
+        wait(for: [exp], timeout: 3)
     }
 
     func testItShouldDeleteTheUserSuccessfully() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+        let exp = XCTestExpectation(function: #function)
 
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
-        let exp = expectation(description: "It should successfully delete the user.")
-
-        pushNotifications.deleteUser("aaa") { result in
-            switch result {
-            case .success:
-                exp.fulfill()
-
-            case .failure:
-                XCTFail("Result should not contain an error.")
+        TestObjects.Client.shared.deleteUser(TestObjects.UserIDs.validId) { result in
+            self.verifyAPIResultSuccess(result, expectation: exp) { voidValue in
+                XCTAssertNotNil(voidValue)
             }
         }
 
-        waitForExpectations(timeout: 3)
+        wait(for: [exp], timeout: 3)
     }
 
     func testItShouldFailToDeleteUserWithEmptyId() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+        let exp = XCTestExpectation(function: #function)
 
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
-        let exp = expectation(description: "It should return an error.")
-
-        pushNotifications.deleteUser("") { result in
-            switch result {
-            case .success:
-                XCTFail("Result should not contain a value.")
-
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
+        TestObjects.Client.shared.deleteUser(TestObjects.UserIDs.emptyString) { result in
+            self.verifyAPIResultFailure(result,
+                                        expectation: exp,
+                                        expectedError: .userIdCannotBeAnEmptyString)
         }
 
-        waitForExpectations(timeout: 3)
+        wait(for: [exp], timeout: 3)
     }
 
     func testItShouldFailToDeleteUserWithIdThatIsTooLong() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+        let exp = XCTestExpectation(function: #function)
 
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
-        let exp = expectation(description: "It should return an error.")
-
-        pushNotifications.deleteUser("""
-        askdsakdjlksajkldjkajdksjkdjkjkjdkajksjkljkajkdsjkajkdjkoiwqjijiofiowenfioneiveni\
-        ownvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioen\
-        winvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioi\
-        wniveiniowenviwniwvnienoin
-        """) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should not contain a value.")
-
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
+        TestObjects.Client.shared.deleteUser(TestObjects.UserIDs.tooLong) { result in
+            self.verifyAPIResultFailure(result,
+                                        expectation: exp,
+                                        expectedError: .userIdInvalid(maxCharacters: 164))
         }
 
-        waitForExpectations(timeout: 3)
+        wait(for: [exp], timeout: 3)
     }
 }

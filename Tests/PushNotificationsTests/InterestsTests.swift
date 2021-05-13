@@ -3,105 +3,58 @@ import XCTest
 
 final class InterestsTests: XCTestCase {
 
+    // N.B: Testing the success case is covered in InstanceConfigurationTests.testValidInstance()
+
     func testInterestsArrayShouldNotBeEmpty() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+        let exp = XCTestExpectation(function: #function)
 
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
-        let interests: [String] = []
-        let publishRequest = [
-            "apns": [
-                "aps": [
-                    "alert": "hi"
-                ]
-            ]
-        ]
-
-        let exp = expectation(description: "It should return an error.")
-
-        pushNotifications.publishToInterests(interests, publishRequest) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should not contain a value.")
-
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
+        TestObjects.Client.shared.publishToInterests(TestObjects.Interests.emptyArray,
+                                                     TestObjects.Publish.publishRequest) { result in
+            self.verifyAPIResultFailure(result,
+                                        expectation: exp,
+                                        expectedError: .interestsArrayCannotBeEmpty)
         }
 
-        waitForExpectations(timeout: 3)
+        wait(for: [exp], timeout: 3)
+    }
+
+    func testInterestsArrayShouldNotContainAnEmptyString() {
+        let exp = XCTestExpectation(function: #function)
+
+        TestObjects.Client.shared.publishToInterests([TestObjects.Interests.emptyString],
+                                                     TestObjects.Publish.publishRequest) { result in
+            let error = PushNotificationsError.internalError(NetworkService.Error.failedResponse(statusCode: 422))
+            self.verifyAPIResultFailure(result,
+                                        expectation: exp,
+                                        expectedError: error)
+        }
+
+        wait(for: [exp], timeout: 3)
     }
 
     func testInterestsArrayShouldContainMaximumOf100Interests() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f56446"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+        let exp = XCTestExpectation(function: #function)
 
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
-        var interests: [String] = []
-
-        for _ in 0...100 {
-            interests.append("Interest")
+        TestObjects.Client.shared.publishToInterests(TestObjects.Interests.tooMany,
+                                                     TestObjects.Publish.publishRequest) { result in
+            self.verifyAPIResultFailure(result,
+                                        expectation: exp,
+                                        expectedError: .interestsArrayContainsTooManyInterests(maxInterests: 100))
         }
 
-        let publishRequest = [
-            "apns": [
-                "aps": [
-                    "alert": "hi"
-                ]
-            ]
-        ]
-
-        let exp = expectation(description: "It should return an error.")
-
-        pushNotifications.publishToInterests(interests, publishRequest) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should not contain a value.")
-
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
-        }
-
-        waitForExpectations(timeout: 3)
+        wait(for: [exp], timeout: 3)
     }
 
     func testInterestInTheArrayIsTooLong() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
+        let exp = XCTestExpectation(function: #function)
 
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
-        let interests = ["""
-        kjfioiowejfiofjeijifjwiejifwejiojfiowejifwjiofejifwejiejfiojioewjiofjiowefeewfinii\
-        enwvinvinwkjfioiowejfiofjeijifjwiejifwejiojfiowejifwjiofejifwejiejfiojioewjiofjiow\
-        efeewfiniienwvinvinw
-        """]
-        let publishRequest = [
-            "apns": [
-                "aps": [
-                    "alert": "hi"
-                ]
-            ]
-        ]
-
-        let exp = expectation(description: "It should return an error.")
-
-        pushNotifications.publishToInterests(interests, publishRequest) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should not contain a value.")
-
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
+        TestObjects.Client.shared.publishToInterests(TestObjects.Interests.tooLong,
+                                                     TestObjects.Publish.publishRequest) { result in
+            self.verifyAPIResultFailure(result,
+                                        expectation: exp,
+                                        expectedError: .interestsArrayContainsAnInvalidInterest(maxCharacters: 164))
         }
 
-        waitForExpectations(timeout: 3)
+        wait(for: [exp], timeout: 3)
     }
 }
