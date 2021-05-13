@@ -8,13 +8,8 @@ final class UsersTests: XCTestCase {
 
         TestObjects.Client.shared.publishToUsers(TestObjects.UserIDs.validArray,
                                                  TestObjects.Publish.publishRequest) { result in
-            switch result {
-            case .success(let publishId):
+            self.verifyAPIResultSuccess(result, expectation: exp) { publishId in
                 XCTAssertNotNil(publishId)
-                exp.fulfill()
-
-            case .failure:
-                XCTFail("Result should not contain an error.")
             }
         }
 
@@ -26,14 +21,9 @@ final class UsersTests: XCTestCase {
 
         TestObjects.Client.shared.publishToUsers(TestObjects.UserIDs.emptyArray,
                                                  TestObjects.Publish.publishRequest) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should not contain a value.")
-
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
+            self.verifyAPIResultFailure(result,
+                                        expectation: exp,
+                                        expectedError: .usersArrayCannotBeEmpty)
         }
 
         waitForExpectations(timeout: 3)
@@ -44,14 +34,9 @@ final class UsersTests: XCTestCase {
 
         TestObjects.Client.shared.publishToUsers([TestObjects.UserIDs.emptyString],
                                                  TestObjects.Publish.publishRequest) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should not contain a value.")
-
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
+            self.verifyAPIResultFailure(result,
+                                        expectation: exp,
+                                        expectedError: .usersArrayCannotContainEmptyString)
         }
 
         waitForExpectations(timeout: 3)
@@ -62,14 +47,9 @@ final class UsersTests: XCTestCase {
 
         TestObjects.Client.shared.publishToUsers([TestObjects.UserIDs.tooLong],
                                                  TestObjects.Publish.publishRequest) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should not contain a value.")
-
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
+            self.verifyAPIResultFailure(result,
+                                        expectation: exp,
+                                        expectedError: .usersArrayContainsAnInvalidUser(maxCharacters: 164))
         }
 
         waitForExpectations(timeout: 3)
@@ -80,14 +60,10 @@ final class UsersTests: XCTestCase {
 
         TestObjects.Client.shared.publishToUsers(TestObjects.UserIDs.tooMany,
                                                  TestObjects.Publish.publishRequest) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should not contain a value.")
-
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
+            let error = PushNotificationsError.internalError(NetworkService.Error.failedResponse(statusCode: 422))
+            self.verifyAPIResultFailure(result,
+                                        expectation: exp,
+                                        expectedError: error)
         }
 
         waitForExpectations(timeout: 3)
@@ -97,12 +73,8 @@ final class UsersTests: XCTestCase {
         let exp = expectation(description: "It should successfully delete the user.")
 
         TestObjects.Client.shared.deleteUser(TestObjects.UserIDs.validId) { result in
-            switch result {
-            case .success:
-                exp.fulfill()
-
-            case .failure:
-                XCTFail("Result should not contain an error.")
+            self.verifyAPIResultSuccess(result, expectation: exp) { voidValue in
+                XCTAssertNotNil(voidValue)
             }
         }
 
@@ -113,14 +85,9 @@ final class UsersTests: XCTestCase {
         let exp = expectation(description: "It should return an error.")
 
         TestObjects.Client.shared.deleteUser(TestObjects.UserIDs.emptyString) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should not contain a value.")
-
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
+            self.verifyAPIResultFailure(result,
+                                        expectation: exp,
+                                        expectedError: .userIdCannotBeAnEmptyString)
         }
 
         waitForExpectations(timeout: 3)
@@ -130,14 +97,9 @@ final class UsersTests: XCTestCase {
         let exp = expectation(description: "It should return an error.")
 
         TestObjects.Client.shared.deleteUser(TestObjects.UserIDs.tooLong) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should not contain a value.")
-
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
+            self.verifyAPIResultFailure(result,
+                                        expectation: exp,
+                                        expectedError: .userIdInvalid(maxCharacters: 164))
         }
 
         waitForExpectations(timeout: 3)

@@ -10,14 +10,9 @@ final class InterestsTests: XCTestCase {
 
         TestObjects.Client.shared.publishToInterests(TestObjects.Interests.emptyArray,
                                                      TestObjects.Publish.publishRequest) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should not contain a value.")
-
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
+            self.verifyAPIResultFailure(result,
+                                        expectation: exp,
+                                        expectedError: .interestsArrayCannotBeEmpty)
         }
 
         waitForExpectations(timeout: 3)
@@ -28,14 +23,10 @@ final class InterestsTests: XCTestCase {
 
         TestObjects.Client.shared.publishToInterests([TestObjects.Interests.emptyString],
                                                      TestObjects.Publish.publishRequest) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should not contain a value.")
-
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
+            let error = PushNotificationsError.internalError(NetworkService.Error.failedResponse(statusCode: 422))
+            self.verifyAPIResultFailure(result,
+                                        expectation: exp,
+                                        expectedError: error)
         }
 
         waitForExpectations(timeout: 3)
@@ -46,14 +37,9 @@ final class InterestsTests: XCTestCase {
 
         TestObjects.Client.shared.publishToInterests(TestObjects.Interests.tooMany,
                                                      TestObjects.Publish.publishRequest) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should not contain a value.")
-
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
+            self.verifyAPIResultFailure(result,
+                                        expectation: exp,
+                                        expectedError: .interestsArrayContainsTooManyInterests(maxInterests: 100))
         }
 
         waitForExpectations(timeout: 3)
@@ -64,14 +50,9 @@ final class InterestsTests: XCTestCase {
 
         TestObjects.Client.shared.publishToInterests(TestObjects.Interests.tooLong,
                                                      TestObjects.Publish.publishRequest) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should not contain a value.")
-
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
+            self.verifyAPIResultFailure(result,
+                                        expectation: exp,
+                                        expectedError: .interestsArrayContainsAnInvalidInterest(maxCharacters: 164))
         }
 
         waitForExpectations(timeout: 3)

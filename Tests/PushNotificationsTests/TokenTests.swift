@@ -7,15 +7,8 @@ final class TokenTests: XCTestCase {
         let exp = expectation(description: "It should successfully authenticate the user.")
 
         TestObjects.Client.shared.generateToken(TestObjects.UserIDs.validId) { result in
-            switch result {
-            case .success(let jwtToken):
-                // 'jwtToken' is a Dictionary<String, String>
-                // Example: ["token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWEiLCJleHAiOjE"]
-                XCTAssertNotNil(jwtToken)
-                exp.fulfill()
-
-            case .failure:
-                XCTFail("Result should not contain an error.")
+            self.verifyAPIResultSuccess(result, expectation: exp) { jwt in
+                XCTAssertNotNil(jwt)
             }
         }
 
@@ -26,14 +19,9 @@ final class TokenTests: XCTestCase {
         let exp = expectation(description: "It should return an error.")
 
         TestObjects.Client.shared.generateToken(TestObjects.UserIDs.emptyString) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should not contain a value.")
-
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
+            self.verifyAPIResultFailure(result,
+                                        expectation: exp,
+                                        expectedError: .userIdCannotBeAnEmptyString)
         }
 
         waitForExpectations(timeout: 3)
@@ -43,14 +31,9 @@ final class TokenTests: XCTestCase {
         let exp = expectation(description: "It should return an error.")
 
         TestObjects.Client.shared.generateToken(TestObjects.UserIDs.tooLong) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should not contain a value.")
-
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
+            self.verifyAPIResultFailure(result,
+                                        expectation: exp,
+                                        expectedError: .userIdInvalid(maxCharacters: 164))
         }
 
         waitForExpectations(timeout: 3)

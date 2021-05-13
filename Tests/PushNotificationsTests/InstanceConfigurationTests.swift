@@ -8,13 +8,8 @@ final class InstanceConfigurationTests: XCTestCase {
 
         TestObjects.Client.shared.publishToInterests(TestObjects.Interests.validArray,
                                                      TestObjects.Publish.publishRequest) { result in
-            switch result {
-            case .success(let publishId):
+            self.verifyAPIResultSuccess(result, expectation: exp) { publishId in
                 XCTAssertNotNil(publishId)
-                exp.fulfill()
-
-            case .failure:
-                XCTFail("Result should not contain an error.")
             }
         }
 
@@ -26,14 +21,9 @@ final class InstanceConfigurationTests: XCTestCase {
 
         TestObjects.Client.emptyInstanceId.publishToInterests(TestObjects.Interests.validArray,
                                                               TestObjects.Publish.publishRequest) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should not contain a value.")
-
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
+            self.verifyAPIResultFailure(result,
+                                        expectation: exp,
+                                        expectedError: .instanceIdCannotBeAnEmptyString)
         }
 
         waitForExpectations(timeout: 3)
@@ -44,14 +34,9 @@ final class InstanceConfigurationTests: XCTestCase {
 
         TestObjects.Client.emptySecretKey.publishToInterests(TestObjects.Interests.validArray,
                                                              TestObjects.Publish.publishRequest) { result in
-            switch result {
-            case .success:
-                XCTFail("Result should not contain a value.")
-
-            case .failure(let error):
-                XCTAssertNotNil(error)
-                exp.fulfill()
-            }
+            self.verifyAPIResultFailure(result,
+                                        expectation: exp,
+                                        expectedError: .secretKeyCannotBeAnEmptyString)
         }
 
         waitForExpectations(timeout: 3)
