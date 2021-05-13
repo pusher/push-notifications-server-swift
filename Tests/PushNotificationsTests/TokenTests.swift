@@ -4,7 +4,7 @@ import XCTest
 final class TokenTests: XCTestCase {
 
     func testItShouldAuthenticateTheUserSuccessfully() {
-        let exp = expectation(description: "It should successfully authenticate the user.")
+        let exp = XCTestExpectation(function: #function)
 
         TestObjects.Client.shared.generateToken(TestObjects.UserIDs.validId) { result in
             self.verifyAPIResultSuccess(result, expectation: exp) { jwt in
@@ -12,11 +12,11 @@ final class TokenTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 3)
+        wait(for: [exp], timeout: 3)
     }
 
     func testItShouldFailToGenerateTokenWithEmptyId() {
-        let exp = expectation(description: "It should return an error.")
+        let exp = XCTestExpectation(function: #function)
 
         TestObjects.Client.shared.generateToken(TestObjects.UserIDs.emptyString) { result in
             self.verifyAPIResultFailure(result,
@@ -24,11 +24,11 @@ final class TokenTests: XCTestCase {
                                         expectedError: .userIdCannotBeAnEmptyString)
         }
 
-        waitForExpectations(timeout: 3)
+        wait(for: [exp], timeout: 3)
     }
 
     func testItShouldFailToGenerateTokenWithIdThatIsTooLong() {
-        let exp = expectation(description: "It should return an error.")
+        let exp = XCTestExpectation(function: #function)
 
         TestObjects.Client.shared.generateToken(TestObjects.UserIDs.tooLong) { result in
             self.verifyAPIResultFailure(result,
@@ -36,6 +36,6 @@ final class TokenTests: XCTestCase {
                                         expectedError: .userIdInvalid(maxCharacters: 164))
         }
 
-        waitForExpectations(timeout: 3)
+        wait(for: [exp], timeout: 3)
     }
 }

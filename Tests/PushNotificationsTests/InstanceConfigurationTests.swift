@@ -4,7 +4,7 @@ import XCTest
 final class InstanceConfigurationTests: XCTestCase {
 
     func testValidInstance() {
-        let exp = expectation(description: "It should successfully publish to the interests.")
+        let exp = XCTestExpectation(function: #function)
 
         TestObjects.Client.shared.publishToInterests(TestObjects.Interests.validArray,
                                                      TestObjects.Publish.publishRequest) { result in
@@ -13,11 +13,11 @@ final class InstanceConfigurationTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 3)
+        wait(for: [exp], timeout: 3)
     }
 
     func testInstanceIdShouldNotBeEmptyString() {
-        let exp = expectation(description: "It should return an error.")
+        let exp = XCTestExpectation(function: #function)
 
         TestObjects.Client.emptyInstanceId.publishToInterests(TestObjects.Interests.validArray,
                                                               TestObjects.Publish.publishRequest) { result in
@@ -26,11 +26,11 @@ final class InstanceConfigurationTests: XCTestCase {
                                         expectedError: .instanceIdCannotBeAnEmptyString)
         }
 
-        waitForExpectations(timeout: 3)
+        wait(for: [exp], timeout: 3)
     }
 
     func testSecretKeyShouldNotBeEmptyString() {
-        let exp = expectation(description: "It should return an error.")
+        let exp = XCTestExpectation(function: #function)
 
         TestObjects.Client.emptySecretKey.publishToInterests(TestObjects.Interests.validArray,
                                                              TestObjects.Publish.publishRequest) { result in
@@ -39,6 +39,6 @@ final class InstanceConfigurationTests: XCTestCase {
                                         expectedError: .secretKeyCannotBeAnEmptyString)
         }
 
-        waitForExpectations(timeout: 3)
+        wait(for: [exp], timeout: 3)
     }
 }

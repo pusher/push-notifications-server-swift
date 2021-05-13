@@ -6,7 +6,7 @@ final class InterestsTests: XCTestCase {
     // N.B: Testing the success case is covered in InstanceConfigurationTests.testValidInstance()
 
     func testInterestsArrayShouldNotBeEmpty() {
-        let exp = expectation(description: "It should return an error.")
+        let exp = XCTestExpectation(function: #function)
 
         TestObjects.Client.shared.publishToInterests(TestObjects.Interests.emptyArray,
                                                      TestObjects.Publish.publishRequest) { result in
@@ -15,11 +15,11 @@ final class InterestsTests: XCTestCase {
                                         expectedError: .interestsArrayCannotBeEmpty)
         }
 
-        waitForExpectations(timeout: 3)
+        wait(for: [exp], timeout: 3)
     }
 
     func testInterestsArrayShouldNotContainAnEmptyString() {
-        let exp = expectation(description: "It should return an error.")
+        let exp = XCTestExpectation(function: #function)
 
         TestObjects.Client.shared.publishToInterests([TestObjects.Interests.emptyString],
                                                      TestObjects.Publish.publishRequest) { result in
@@ -29,11 +29,11 @@ final class InterestsTests: XCTestCase {
                                         expectedError: error)
         }
 
-        waitForExpectations(timeout: 3)
+        wait(for: [exp], timeout: 3)
     }
 
     func testInterestsArrayShouldContainMaximumOf100Interests() {
-        let exp = expectation(description: "It should return an error.")
+        let exp = XCTestExpectation(function: #function)
 
         TestObjects.Client.shared.publishToInterests(TestObjects.Interests.tooMany,
                                                      TestObjects.Publish.publishRequest) { result in
@@ -42,11 +42,11 @@ final class InterestsTests: XCTestCase {
                                         expectedError: .interestsArrayContainsTooManyInterests(maxInterests: 100))
         }
 
-        waitForExpectations(timeout: 3)
+        wait(for: [exp], timeout: 3)
     }
 
     func testInterestInTheArrayIsTooLong() {
-        let exp = expectation(description: "It should return an error.")
+        let exp = XCTestExpectation(function: #function)
 
         TestObjects.Client.shared.publishToInterests(TestObjects.Interests.tooLong,
                                                      TestObjects.Publish.publishRequest) { result in
@@ -55,6 +55,6 @@ final class InterestsTests: XCTestCase {
                                         expectedError: .interestsArrayContainsAnInvalidInterest(maxCharacters: 164))
         }
 
-        waitForExpectations(timeout: 3)
+        wait(for: [exp], timeout: 3)
     }
 }
