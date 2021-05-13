@@ -40,6 +40,26 @@ Use `import PushNotifications` to access the APIs.
 
 ## Usage
 
+### Migrating from 1.x to 2.x
+
+The 2.0 release contains several improvements, however there are a few breaking API changes if you are upgrading from a 1.x release:
+
+<details>
+  <summary>1.x to 2.x migration steps</summary>
+
+1. The SDK replaces its own `Result` implementation the <a href="https://developer.apple.com/documentation/swift/result">`Result`</a> type included in Swift 5.0. The API changes subtly when inspecting the result value (e.g. when using a `switch` statement):
+    - `.value(let anObject):` becomes `.success(let anObject):`
+    - `.error(let anObject):` becomes `.failure(let anObject):`
+1. Errors returned by the SDK in a `Result` are now specifically instances of `PushNotificationsError` rather than just `Error`.
+1. `PushNotificationsError` has some changes:
+    - New error cases have been added covering the error conditions that were previously reported using the `.error(String)` (which has been removed). Testing against SDK errors in your own server app is now straightforward and more robust as no `String` equality checks are required.
+    - It now conforms to `LocalizedError`. A human-readable description of an error can be accessed using the `localizedDescription` property on the error.
+1. The `publish(_:_:completion:)` method has been removed (this was deprecated in a previous release). The `publishToInterests(_:_:completion:)` method can be used instead.
+
+</details>
+
+### Code examples
+
 ```swift
 // Pusher Beams Instance Id.
 let instanceId = "c7c52433-8c65-43e6-9ef2-922d9ed9e196"
