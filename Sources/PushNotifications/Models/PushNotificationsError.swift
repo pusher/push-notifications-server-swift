@@ -124,6 +124,7 @@ extension PushNotificationsError {
 
 extension PushNotificationsError: Equatable {
 
+    // swiftlint:disable:next cyclomatic_complexity
     public static func == (lhs: PushNotificationsError, rhs: PushNotificationsError) -> Bool {
         switch (lhs, rhs) {
         case (.instanceIdCannotBeAnEmptyString, .instanceIdCannotBeAnEmptyString):
@@ -132,10 +133,12 @@ extension PushNotificationsError: Equatable {
         case (.interestsArrayCannotBeEmpty, .interestsArrayCannotBeEmpty):
             return true
 
-        case (.interestsArrayContainsAnInvalidInterest(let maxOne), .interestsArrayContainsAnInvalidInterest(let maxTwo)):
+        case (.interestsArrayContainsAnInvalidInterest(let maxOne),
+              .interestsArrayContainsAnInvalidInterest(let maxTwo)):
             return maxOne == maxTwo
 
-        case (.interestsArrayContainsTooManyInterests(let maxOne), .interestsArrayContainsTooManyInterests(let maxTwo)):
+        case (.interestsArrayContainsTooManyInterests(let maxOne),
+              .interestsArrayContainsTooManyInterests(let maxTwo)):
             return maxOne == maxTwo
 
         case (.internalError(let errorOne), .internalError(let errorTwo)):
