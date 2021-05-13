@@ -45,7 +45,7 @@ Use `import PushNotifications` to access the APIs.
 The 2.0 release contains several improvements, however there are a few breaking API changes if you are upgrading from a 1.x release:
 
 <details>
-  <summary>1.x to 2.x migration steps</summary>
+  <summary>Migration notes</summary>
 
 1. The SDK replaces its own `Result` implementation the <a href="https://developer.apple.com/documentation/swift/result">`Result`</a> type included in Swift 5.0. The API changes subtly when inspecting the result value (e.g. when using a `switch` statement):
     - `.value(let anObject):` becomes `.success(let anObject):`
