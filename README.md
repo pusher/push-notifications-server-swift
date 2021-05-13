@@ -38,7 +38,7 @@ let package = Package(
 
 Use `import PushNotifications` to access the APIs.
 
-## Example
+## Usage
 
 ```swift
 // Pusher Beams Instance Id.
@@ -109,7 +109,11 @@ pushNotifications.deleteUser("Elmo", completion: { result in
 })
 ```
 
-## Communication
+## Documentation
+
+Full documentation of the library can be found in the [API docs](https://pusher.github.io/pusher-http-swift/).
+
+## Reporting bugs and requesting features
 
 - Found a bug? Please open an [issue](https://github.com/pusher/push-notifications-server-swift/issues).
 - Have a feature request. Please open an [issue](https://github.com/pusher/push-notifications-server-swift/issues).
@@ -119,6 +123,10 @@ pushNotifications.deleteUser("Elmo", completion: { result in
 
 Beams is owned and maintained by [Pusher](https://pusher.com).
 
+It uses code from the following third-party repositories:
+
+- [Swift-JWT](https://github.com/Kitura/Swift-JWT)
+
 ## License
 
-This project is released under the MIT license. See [LICENSE](https://github.com/pusher/push-notifications-server-swift/blob/master/LICENSE) for details.
+This project is released under the MIT license. See [LICENSE](https://github.com/pusher/push-notifications-server-swift/blob/master/LICENSE) for details if you want to use it in your own project(s).
