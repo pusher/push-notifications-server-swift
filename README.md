@@ -1,6 +1,12 @@
 # Pusher Beams Swift Server SDK
 
 ![Build Status](https://github.com/pusher/push-notifications-server-swift/workflows/CI/badge.svg)
+[![Latest Release](https://img.shields.io/github/v/release/pusher/push-notifications-server-swift)](https://github.com/pusher/push-notifications-server-swift/releases)
+[![API Docs](https://img.shields.io/badge/Docs-here!-lightgrey)](https://pusher.github.io/push-notifications-server-swift/)
+[![Supported Platforms](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fpusher%2Fpush-notifications-server-swift%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/pusher/push-notifications-server-swift)
+[![Swift Versions](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fpusher%2Fpush-notifications-server-swift%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/pusher/push-notifications-server-swift)
+[![Twitter](https://img.shields.io/badge/twitter-@Pusher-blue.svg?style=flat)](http://twitter.com/Pusher)
+[![LICENSE](https://img.shields.io/github/license/pusher/push-notifications-server-swift)](https://github.com/pusher/push-notifications-server-swift/blob/main/LICENSE)
 
 ## Building the project
 
