@@ -4,14 +4,9 @@ import XCTest
 final class TokenTests: XCTestCase {
 
     func testItShouldAuthenticateTheUserSuccessfully() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
-
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
         let exp = expectation(description: "It should successfully authenticate the user.")
 
-        pushNotifications.generateToken("aaa") { result in
+        TestObjects.Client.shared.generateToken(TestObjects.UserIDs.validId) { result in
             switch result {
             case .success(let jwtToken):
                 // 'jwtToken' is a Dictionary<String, String>
@@ -28,14 +23,9 @@ final class TokenTests: XCTestCase {
     }
 
     func testItShouldFailToGenerateTokenWithEmptyId() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
-
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
         let exp = expectation(description: "It should return an error.")
 
-        pushNotifications.generateToken("") { result in
+        TestObjects.Client.shared.generateToken(TestObjects.UserIDs.emptyString) { result in
             switch result {
             case .success:
                 XCTFail("Result should not contain a value.")
@@ -50,19 +40,9 @@ final class TokenTests: XCTestCase {
     }
 
     func testItShouldFailToGenerateTokenWithIdThatIsTooLong() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
-
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
         let exp = expectation(description: "It should return an error.")
 
-        pushNotifications.generateToken("""
-        askdsakdjlksajkldjkajdksjkdjkjkjdkajksjkljkajkdsjkajkdjkoiwqjijiofiowenfioneiveniow\
-        nvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinv\
-        ioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioiwnivei\
-        niowenviwniwvnienoin
-        """) { result in
+        TestObjects.Client.shared.generateToken(TestObjects.UserIDs.tooLong) { result in
             switch result {
             case .success:
                 XCTFail("Result should not contain a value.")

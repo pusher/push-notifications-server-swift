@@ -3,24 +3,31 @@ import XCTest
 
 final class InterestsTests: XCTestCase {
 
+    // N.B: Testing the success case is covered in InstanceConfigurationTests.testValidInstance()
+
     func testInterestsArrayShouldNotBeEmpty() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
-
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
-        let interests: [String] = []
-        let publishRequest = [
-            "apns": [
-                "aps": [
-                    "alert": "hi"
-                ]
-            ]
-        ]
-
         let exp = expectation(description: "It should return an error.")
 
-        pushNotifications.publishToInterests(interests, publishRequest) { result in
+        TestObjects.Client.shared.publishToInterests(TestObjects.Interests.emptyArray,
+                                                     TestObjects.Publish.publishRequest) { result in
+            switch result {
+            case .success:
+                XCTFail("Result should not contain a value.")
+
+            case .failure(let error):
+                XCTAssertNotNil(error)
+                exp.fulfill()
+            }
+        }
+
+        waitForExpectations(timeout: 3)
+    }
+
+    func testInterestsArrayShouldNotContainAnEmptyString() {
+        let exp = expectation(description: "It should return an error.")
+
+        TestObjects.Client.shared.publishToInterests([TestObjects.Interests.emptyString],
+                                                     TestObjects.Publish.publishRequest) { result in
             switch result {
             case .success:
                 XCTFail("Result should not contain a value.")
@@ -35,28 +42,10 @@ final class InterestsTests: XCTestCase {
     }
 
     func testInterestsArrayShouldContainMaximumOf100Interests() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f56446"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
-
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
-        var interests: [String] = []
-
-        for _ in 0...100 {
-            interests.append("Interest")
-        }
-
-        let publishRequest = [
-            "apns": [
-                "aps": [
-                    "alert": "hi"
-                ]
-            ]
-        ]
-
         let exp = expectation(description: "It should return an error.")
 
-        pushNotifications.publishToInterests(interests, publishRequest) { result in
+        TestObjects.Client.shared.publishToInterests(TestObjects.Interests.tooMany,
+                                                     TestObjects.Publish.publishRequest) { result in
             switch result {
             case .success:
                 XCTFail("Result should not contain a value.")
@@ -71,27 +60,10 @@ final class InterestsTests: XCTestCase {
     }
 
     func testInterestInTheArrayIsTooLong() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
-
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
-        let interests = ["""
-        kjfioiowejfiofjeijifjwiejifwejiojfiowejifwjiofejifwejiejfiojioewjiofjiowefeewfinii\
-        enwvinvinwkjfioiowejfiofjeijifjwiejifwejiojfiowejifwjiofejifwejiejfiojioewjiofjiow\
-        efeewfiniienwvinvinw
-        """]
-        let publishRequest = [
-            "apns": [
-                "aps": [
-                    "alert": "hi"
-                ]
-            ]
-        ]
-
         let exp = expectation(description: "It should return an error.")
 
-        pushNotifications.publishToInterests(interests, publishRequest) { result in
+        TestObjects.Client.shared.publishToInterests(TestObjects.Interests.tooLong,
+                                                     TestObjects.Publish.publishRequest) { result in
             switch result {
             case .success:
                 XCTFail("Result should not contain a value.")

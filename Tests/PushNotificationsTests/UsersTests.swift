@@ -4,27 +4,10 @@ import XCTest
 final class UsersTests: XCTestCase {
 
     func testValidPublishToUsers() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
-
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
-        let publishRequest = [
-            "apns": [
-                "aps": [
-                    "alert": "hi"
-                ]
-            ]
-        ]
-
         let exp = expectation(description: "It should successfully publish to users.")
 
-        pushNotifications.publishToUsers(["jonathan",
-                                          "jordan",
-                                          "luís",
-                                          "luka",
-                                          "mina"],
-                                         publishRequest) { result in
+        TestObjects.Client.shared.publishToUsers(TestObjects.UserIDs.validArray,
+                                                 TestObjects.Publish.publishRequest) { result in
             switch result {
             case .success(let publishId):
                 XCTAssertNotNil(publishId)
@@ -39,22 +22,10 @@ final class UsersTests: XCTestCase {
     }
 
     func testPublishToUsersRequiresAtLeastOneUser() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
-
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
-        let publishRequest = [
-            "apns": [
-                "aps": [
-                    "alert": "hi"
-                ]
-            ]
-        ]
-
         let exp = expectation(description: "It should return an error.")
 
-        pushNotifications.publishToUsers([], publishRequest) { result in
+        TestObjects.Client.shared.publishToUsers(TestObjects.UserIDs.emptyArray,
+                                                 TestObjects.Publish.publishRequest) { result in
             switch result {
             case .success:
                 XCTFail("Result should not contain a value.")
@@ -69,22 +40,10 @@ final class UsersTests: XCTestCase {
     }
 
     func testPublishToUsersUserShouldNotBeAnEmptyString() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
-
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
-        let publishRequest = [
-            "apns": [
-                "aps": [
-                    "alert": "hi"
-                ]
-            ]
-        ]
-
         let exp = expectation(description: "It should return an error.")
 
-        pushNotifications.publishToUsers([""], publishRequest) { result in
+        TestObjects.Client.shared.publishToUsers([TestObjects.UserIDs.emptyString],
+                                                 TestObjects.Publish.publishRequest) { result in
             switch result {
             case .success:
                 XCTFail("Result should not contain a value.")
@@ -99,27 +58,10 @@ final class UsersTests: XCTestCase {
     }
 
     func testPublishToUsersUsernameShouldBeLessThan165Characters() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
-
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
-        let publishRequest = [
-            "apns": [
-                "aps": [
-                    "alert": "hi"
-                ]
-            ]
-        ]
-
         let exp = expectation(description: "It should return an error.")
 
-        pushNotifications.publishToUsers(["""
-        askdsakdjlksajkldjkajdksjkdjkjkjdkajksjkljkajkdsjkajkdjkoiwqjijiofiowenfioneivenio\
-        wnvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwi\
-        nvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioiwni\
-        veiniowenviwniwvnienoin
-        """], publishRequest) { result in
+        TestObjects.Client.shared.publishToUsers([TestObjects.UserIDs.tooLong],
+                                                 TestObjects.Publish.publishRequest) { result in
             switch result {
             case .success:
                 XCTFail("Result should not contain a value.")
@@ -134,28 +76,10 @@ final class UsersTests: XCTestCase {
     }
 
     func testPublishToMoreThan1000UsersShouldFail() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
-
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
-        let publishRequest = [
-            "apns": [
-                "aps": [
-                    "alert": "hi"
-                ]
-            ]
-        ]
-
-        var users: [String] = []
-
-        for _ in 0...1000 {
-            users.append("a")
-        }
-
         let exp = expectation(description: "It should return an error.")
 
-        pushNotifications.publishToUsers(users, publishRequest) { result in
+        TestObjects.Client.shared.publishToUsers(TestObjects.UserIDs.tooMany,
+                                                 TestObjects.Publish.publishRequest) { result in
             switch result {
             case .success:
                 XCTFail("Result should not contain a value.")
@@ -170,14 +94,9 @@ final class UsersTests: XCTestCase {
     }
 
     func testItShouldDeleteTheUserSuccessfully() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
-
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
         let exp = expectation(description: "It should successfully delete the user.")
 
-        pushNotifications.deleteUser("aaa") { result in
+        TestObjects.Client.shared.deleteUser(TestObjects.UserIDs.validId) { result in
             switch result {
             case .success:
                 exp.fulfill()
@@ -191,14 +110,9 @@ final class UsersTests: XCTestCase {
     }
 
     func testItShouldFailToDeleteUserWithEmptyId() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
-
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
         let exp = expectation(description: "It should return an error.")
 
-        pushNotifications.deleteUser("") { result in
+        TestObjects.Client.shared.deleteUser(TestObjects.UserIDs.emptyString) { result in
             switch result {
             case .success:
                 XCTFail("Result should not contain a value.")
@@ -213,19 +127,9 @@ final class UsersTests: XCTestCase {
     }
 
     func testItShouldFailToDeleteUserWithIdThatIsTooLong() {
-        let instanceId = "1b880590-6301-4bb5-b34f-45db1c5f5644"
-        let secretKey = "F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"
-
-        let pushNotifications = PushNotifications(instanceId: instanceId, secretKey: secretKey)
-
         let exp = expectation(description: "It should return an error.")
 
-        pushNotifications.deleteUser("""
-        askdsakdjlksajkldjkajdksjkdjkjkjdkajksjkljkajkdsjkajkdjkoiwqjijiofiowenfioneiveni\
-        ownvionioeniovnioenwinvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioen\
-        winvioenioniwenvioiwniveiniowenviwniwvnienoiwnvionioeniovnioenwinvioenioniwenvioi\
-        wniveiniowenviwniwvnienoin
-        """) { result in
+        TestObjects.Client.shared.deleteUser(TestObjects.UserIDs.tooLong) { result in
             switch result {
             case .success:
                 XCTFail("Result should not contain a value.")
