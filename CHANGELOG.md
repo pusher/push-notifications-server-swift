@@ -5,7 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/pusher/push-notifications-server-swift/compare/1.0.3...HEAD)
+## [Unreleased](https://github.com/pusher/push-notifications-server-swift/compare/2.0.0...HEAD)
+
+## 2.0.0 - 2021-05-13
+
+### Added
+
+- Several new error cases to `PushNotificationsError` to cover the conditions previously reported by the `.error(String)` case (see: "Removed").
+- [API documentation](https://pusher.github.io/push-notifications-server-swift).
+- README information badges.
+
+### Changed
+
+- `PushNotificationsError` now conforms to `LocalizedError`.
+- The SDK now uses the built-in `Result` type. The `swift-tools-version` in `Package.swift` has been upgraded from 4.0 to 5.0 in order to make this change.
+- All `completion` closures that return a `Result` now return `PushNotificationsError` instead of `Error`.
+- `JWTPayload` is no longer part of the public API. (This was not actually used by any other public API and was public by mistake).
+
+### Removed
+
+- The `.error(String)` case from `PushNotificationsError`.
+- The `publish(_:_:completion:)` method (which had been deprecated in a previous release).
+- The custom implementation of `Result` (see: "Changed").
+- The `CompletionHandler` typealias. (This has no impact when using the public API).
 
 ## 1.0.3 - 2021-02-02
 
