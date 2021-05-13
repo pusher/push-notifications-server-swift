@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>PushNotifications Structure Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Struct/PushNotifications" class="dashAnchor"></a>
+    <a title="PushNotifications Structure Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html"> Docs</a> (100% documented)</p>
+        <p class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html"> Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        PushNotifications Structure Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/PushNotificationsError.html">PushNotificationsError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/PushNotifications.html">PushNotifications</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>PushNotifications</h1>
+              <div class="declaration">
+                <div class="language">
+                  
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">PushNotifications</span> <span class="p">:</span> <span class="kt">JWTTokenGenerable</span></code></pre>
+
+                </div>
+              </div>
+            <p>PushNotifications struct implements publish method
+that is used to publish push notifications to specified interests.</p>
+<div class="aside aside-precondition">
+    <p class="aside-title">Precondition</p>
+    <code>instanceId</code> should not be an empty string.
+
+</div><div class="aside aside-precondition">
+    <p class="aside-title">Precondition</p>
+    <code>secretKey</code> should not be an empty string.
+
+</div>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17PushNotificationsAAV10instanceId9secretKeyABSS_SStcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(instanceId:secretKey:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17PushNotificationsAAV10instanceId9secretKeyABSS_SStcfc">init(instanceId:<wbr>secretKey:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a new <code>PushNotifications</code> instance.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">instanceId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">secretKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>instanceId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Pusher Beams Instance Id.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>secretKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Pusher Beams Secret Key.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17PushNotificationsAAV18publishToInterests__10completionySaySSG_SDySSypGys6ResultOySSAA0aB5ErrorOGctF"></a>
+                    <a name="//apple_ref/swift/Method/publishToInterests(_:_:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17PushNotificationsAAV18publishToInterests__10completionySaySSG_SDySSypGys6ResultOySSAA0aB5ErrorOGctF">publishToInterests(_:<wbr>_:<wbr>completion:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Publish the given <code>publishRequest</code> to the specified interests.</p>
+<pre class="highlight swift"><code><span class="c1">// Pusher Beams Instance Id.</span>
+<span class="k">let</span> <span class="nv">instanceId</span> <span class="o">=</span> <span class="s">"1b880590-6301-4bb5-b34f-45db1c5f5644"</span>
+<span class="c1">// Pusher Beams Secret Key.</span>
+<span class="k">let</span> <span class="nv">secretKey</span> <span class="o">=</span> <span class="s">"F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"</span>
+<span class="c1">// PushNotifications instance.</span>
+<span class="k">let</span> <span class="nv">pushNotifications</span> <span class="o">=</span> <span class="kt">PushNotifications</span><span class="p">(</span><span class="nv">instanceId</span><span class="p">:</span> <span class="n">instanceId</span><span class="p">,</span> <span class="nv">secretKey</span><span class="p">:</span> <span class="n">secretKey</span><span class="p">)</span>
+
+<span class="k">let</span> <span class="nv">interests</span> <span class="o">=</span> <span class="p">[</span><span class="s">"pizza"</span><span class="p">,</span> <span class="s">"donuts"</span><span class="p">]</span>
+<span class="c1">// Publish request: APNs, FCM.</span>
+<span class="k">let</span> <span class="nv">publishRequest</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s">"apns"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s">"aps"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s">"alert"</span><span class="p">:</span> <span class="s">"Hello"</span>
+        <span class="p">]</span>
+    <span class="p">],</span>
+    <span class="s">"fcm"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s">"notification"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s">"title"</span><span class="p">:</span> <span class="s">"Hello"</span><span class="p">,</span>
+<span class="s">"body"</span><span class="p">:</span>  <span class="s">"Hello, world"</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="p">]</span>
+<span class="p">]</span>
+
+<span class="n">pushNotifications</span><span class="o">.</span><span class="nf">publishToInterests</span><span class="p">(</span><span class="n">interests</span><span class="p">,</span> <span class="n">publishRequest</span><span class="p">)</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">publishId</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Publish id: </span><span class="se">\(</span><span class="n">publishId</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Error: </span><span class="se">\(</span><span class="n">error</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">publishToInterests</span><span class="p">(</span><span class="n">_</span> <span class="nv">interests</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span>
+                               <span class="n">_</span> <span class="nv">publishRequest</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">],</span>
+                               <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Result</span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt"><a href="../Enums/PushNotificationsError.html">PushNotificationsError</a></span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>interests</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Array of strings that contains interests.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>publishRequest</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Dictionary containing the body of the push notification publish request.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The block to execute when the <code>publishToInterests</code> operation is complete.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A non-empty device id string if successful; or a non-nil <code><a href="../Enums/PushNotificationsError.html">PushNotificationsError</a></code> error otherwise.
+Example usage:</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17PushNotificationsAAV14publishToUsers__10completionySaySSG_SDySSypGys6ResultOySSAA0aB5ErrorOGctF"></a>
+                    <a name="//apple_ref/swift/Method/publishToUsers(_:_:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17PushNotificationsAAV14publishToUsers__10completionySaySSG_SDySSypGys6ResultOySSAA0aB5ErrorOGctF">publishToUsers(_:<wbr>_:<wbr>completion:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Publish the given <code>publishRequest</code> to the specified users.</p>
+<pre class="highlight swift"><code><span class="c1">// Pusher Beams Instance Id.</span>
+<span class="k">let</span> <span class="nv">instanceId</span> <span class="o">=</span> <span class="s">"1b880590-6301-4bb5-b34f-45db1c5f5644"</span>
+<span class="c1">// Pusher Beams Secret Key.</span>
+<span class="k">let</span> <span class="nv">secretKey</span> <span class="o">=</span> <span class="s">"F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"</span>
+<span class="c1">// PushNotifications instance.</span>
+<span class="k">let</span> <span class="nv">pushNotifications</span> <span class="o">=</span> <span class="kt">PushNotifications</span><span class="p">(</span><span class="nv">instanceId</span><span class="p">:</span> <span class="n">instanceId</span><span class="p">,</span> <span class="nv">secretKey</span><span class="p">:</span> <span class="n">secretKey</span><span class="p">)</span>
+
+<span class="k">let</span> <span class="nv">users</span> <span class="o">=</span> <span class="p">[</span><span class="s">"user1"</span><span class="p">,</span> <span class="s">"user2"</span><span class="p">,</span> <span class="s">"user3"</span><span class="p">]</span>
+<span class="c1">// Publish request: APNs, FCM.</span>
+<span class="k">let</span> <span class="nv">publishRequest</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s">"apns"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s">"aps"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s">"alert"</span><span class="p">:</span> <span class="s">"Hello"</span>
+        <span class="p">]</span>
+    <span class="p">],</span>
+    <span class="s">"fcm"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s">"notification"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s">"title"</span><span class="p">:</span> <span class="s">"Hello"</span><span class="p">,</span>
+            <span class="s">"body"</span><span class="p">:</span>  <span class="s">"Hello, world"</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="p">]</span>
+<span class="p">]</span>
+
+<span class="n">pushNotifications</span><span class="o">.</span><span class="nf">publishToUsers</span><span class="p">(</span><span class="n">users</span><span class="p">,</span> <span class="n">publishRequest</span><span class="p">)</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">publishId</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Publish id: </span><span class="se">\(</span><span class="n">publishId</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Error: </span><span class="se">\(</span><span class="n">error</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">publishToUsers</span><span class="p">(</span><span class="n">_</span> <span class="nv">users</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span>
+                           <span class="n">_</span> <span class="nv">publishRequest</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">],</span>
+                           <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Result</span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt"><a href="../Enums/PushNotificationsError.html">PushNotificationsError</a></span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>users</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Array of strings that contains user ids.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>publishRequest</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Dictionary containing the body of the push notification publish request.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The block to execute when the <code>publishToUsers</code> operation is complete.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A non-empty publish id string if successful; or a non-nil <code><a href="../Enums/PushNotificationsError.html">PushNotificationsError</a></code> error otherwise.
+Example usage:</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17PushNotificationsAAV13generateToken_10completionySS_ys6ResultOySDyS2SGAA0aB5ErrorOGctF"></a>
+                    <a name="//apple_ref/swift/Method/generateToken(_:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17PushNotificationsAAV13generateToken_10completionySS_ys6ResultOySDyS2SGAA0aB5ErrorOGctF">generateToken(_:<wbr>completion:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a signed JWT for a user id.</p>
+<pre class="highlight swift"><code><span class="c1">// Pusher Beams Instance Id.</span>
+<span class="k">let</span> <span class="nv">instanceId</span> <span class="o">=</span> <span class="s">"1b880590-6301-4bb5-b34f-45db1c5f5644"</span>
+<span class="c1">// Pusher Beams Secret Key.</span>
+<span class="k">let</span> <span class="nv">secretKey</span> <span class="o">=</span> <span class="s">"F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"</span>
+<span class="c1">// PushNotifications instance.</span>
+<span class="k">let</span> <span class="nv">pushNotifications</span> <span class="o">=</span> <span class="kt">PushNotifications</span><span class="p">(</span><span class="nv">instanceId</span><span class="p">:</span> <span class="n">instanceId</span><span class="p">,</span> <span class="nv">secretKey</span><span class="p">:</span> <span class="n">secretKey</span><span class="p">)</span>
+
+<span class="n">pushNotifications</span><span class="o">.</span><span class="nf">generateToken</span><span class="p">(</span><span class="s">"Al Pacino"</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">jwtToken</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"</span><span class="se">\(</span><span class="n">jwtToken</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"</span><span class="se">\(</span><span class="n">error</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">generateToken</span><span class="p">(</span><span class="n">_</span> <span class="nv">userId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+                          <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Result</span><span class="o">&lt;</span><span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">String</span><span class="p">],</span> <span class="kt"><a href="../Enums/PushNotificationsError.html">PushNotificationsError</a></span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>userId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Id of a user for which we want to generate the JWT token.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The block to execute when the <code>generateToken</code> operation is complete.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A signed JWT if successful, or a non-nil <code><a href="../Enums/PushNotificationsError.html">PushNotificationsError</a></code> error otherwise.
+Example usage:</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:17PushNotificationsAAV10deleteUser_10completionySS_ys6ResultOyytAA0aB5ErrorOGctF"></a>
+                    <a name="//apple_ref/swift/Method/deleteUser(_:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:17PushNotificationsAAV10deleteUser_10completionySS_ys6ResultOyytAA0aB5ErrorOGctF">deleteUser(_:<wbr>completion:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Contacts the Beams service to remove all the devices of the given user.</p>
+<pre class="highlight swift"><code><span class="c1">// Pusher Beams Instance Id.</span>
+<span class="k">let</span> <span class="nv">instanceId</span> <span class="o">=</span> <span class="s">"1b880590-6301-4bb5-b34f-45db1c5f5644"</span>
+<span class="c1">// Pusher Beams Secret Key.</span>
+<span class="k">let</span> <span class="nv">secretKey</span> <span class="o">=</span> <span class="s">"F8AC0B756E50DF235F642D6F0DC2CDE0328CD9184B3874C5E91AB2189BB722FE"</span>
+<span class="c1">// PushNotifications instance.</span>
+<span class="k">let</span> <span class="nv">pushNotifications</span> <span class="o">=</span> <span class="kt">PushNotifications</span><span class="p">(</span><span class="nv">instanceId</span><span class="p">:</span> <span class="n">instanceId</span><span class="p">,</span> <span class="nv">secretKey</span><span class="p">:</span> <span class="n">secretKey</span><span class="p">)</span>
+
+<span class="n">pushNotifications</span><span class="o">.</span><span class="nf">deleteUser</span><span class="p">(</span><span class="s">"Al Pacino"</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nv">success</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"User deleted 👌"</span><span class="p">)</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"</span><span class="se">\(</span><span class="n">error</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">deleteUser</span><span class="p">(</span><span class="n">_</span> <span class="nv">userId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+                       <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Result</span><span class="o">&lt;</span><span class="kt">Void</span><span class="p">,</span> <span class="kt"><a href="../Enums/PushNotificationsError.html">PushNotificationsError</a></span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>userId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Id of a user for which we want to remove all the devices.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The block to execute when the <code>deleteUser</code> operation is complete.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void if successful, or a non-nil <code><a href="../Enums/PushNotificationsError.html">PushNotificationsError</a></code> error otherwise.
+Example usage:</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2021 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2021-05-13)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

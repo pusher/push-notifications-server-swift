@@ -1,6 +1,12 @@
 # Pusher Beams Swift Server SDK
 
 ![Build Status](https://github.com/pusher/push-notifications-server-swift/workflows/CI/badge.svg)
+[![Latest Release](https://img.shields.io/github/v/release/pusher/push-notifications-server-swift)](https://github.com/pusher/push-notifications-server-swift/releases)
+[![API Docs](https://img.shields.io/badge/Docs-here!-lightgrey)](https://pusher.github.io/push-notifications-server-swift/)
+[![Supported Platforms](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fpusher%2Fpush-notifications-server-swift%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/pusher/push-notifications-server-swift)
+[![Swift Versions](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fpusher%2Fpush-notifications-server-swift%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/pusher/push-notifications-server-swift)
+[![Twitter](https://img.shields.io/badge/twitter-@Pusher-blue.svg?style=flat)](http://twitter.com/Pusher)
+[![LICENSE](https://img.shields.io/github/license/pusher/push-notifications-server-swift)](https://github.com/pusher/push-notifications-server-swift/blob/main/LICENSE)
 
 ## Building the project
 
@@ -32,7 +38,7 @@ let package = Package(
 
 Use `import PushNotifications` to access the APIs.
 
-## Example
+## Usage
 
 ```swift
 // Pusher Beams Instance Id.
@@ -103,7 +109,11 @@ pushNotifications.deleteUser("Elmo", completion: { result in
 })
 ```
 
-## Communication
+## Documentation
+
+Full documentation of the library can be found in the [API docs](https://pusher.github.io/push-notifications-server-swift/).
+
+## Reporting bugs and requesting features
 
 - Found a bug? Please open an [issue](https://github.com/pusher/push-notifications-server-swift/issues).
 - Have a feature request. Please open an [issue](https://github.com/pusher/push-notifications-server-swift/issues).
@@ -113,6 +123,10 @@ pushNotifications.deleteUser("Elmo", completion: { result in
 
 Beams is owned and maintained by [Pusher](https://pusher.com).
 
+It uses code from the following third-party repositories:
+
+- [Swift-JWT](https://github.com/Kitura/Swift-JWT)
+
 ## License
 
-This project is released under the MIT license. See [LICENSE](https://github.com/pusher/push-notifications-server-swift/blob/master/LICENSE) for details.
+This project is released under the MIT license. See [LICENSE](https://github.com/pusher/push-notifications-server-swift/blob/master/LICENSE) for details if you want to use it in your own project(s).

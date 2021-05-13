@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+    <script src="js/lunr.min.js" defer></script>
+    <script src="js/typeahead.jquery.js" defer></script>
+    <script src="js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+    <a title="  Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="index.html"> Docs</a> (100% documented)</p>
+        <p class="header-right">
+          <form role="search" action="search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="index.html"> Reference</a>
+        <img id="carat" src="img/carat.png" />
+          Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Enums/PushNotificationsError.html">PushNotificationsError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Structs/PushNotifications.html">PushNotifications</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            
+            <h1 id='pusher-beams-swift-server-sdk' class='heading'>Pusher Beams Swift Server SDK</h1>
+
+<p><img src="https://github.com/pusher/push-notifications-server-swift/workflows/CI/badge.svg" alt="Build Status">
+<a href="https://github.com/pusher/push-notifications-server-swift/releases"><img src="https://img.shields.io/github/v/release/pusher/push-notifications-server-swift" alt="Latest Release"></a>
+<a href="https://pusher.github.io/push-notifications-server-swift/"><img src="https://img.shields.io/badge/Docs-here!-lightgrey" alt="API Docs"></a>
+<a href="https://swiftpackageindex.com/pusher/push-notifications-server-swift"><img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fpusher%2Fpush-notifications-server-swift%2Fbadge%3Ftype%3Dplatforms" alt="Supported Platforms"></a>
+<a href="https://swiftpackageindex.com/pusher/push-notifications-server-swift"><img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fpusher%2Fpush-notifications-server-swift%2Fbadge%3Ftype%3Dswift-versions" alt="Swift Versions"></a>
+<a href="http://twitter.com/Pusher"><img src="https://img.shields.io/badge/twitter-@Pusher-blue.svg?style=flat" alt="Twitter"></a>
+<a href="https://github.com/pusher/push-notifications-server-swift/blob/main/LICENSE"><img src="https://img.shields.io/github/license/pusher/push-notifications-server-swift" alt="LICENSE"></a></p>
+<h2 id='building-the-project' class='heading'>Building the project</h2>
+
+<p><code>swift build</code></p>
+<h2 id='running-the-tests' class='heading'>Running the tests</h2>
+
+<p><code>swift test</code></p>
+<h2 id='installation' class='heading'>Installation</h2>
+
+<p>To include PushNotifications in your package, add the following to your Package.swift file.</p>
+<pre class="highlight swift"><code><span class="c1">// swift-tools-version:4.0</span>
+<span class="kd">import</span> <span class="kt">PackageDescription</span>
+
+<span class="k">let</span> <span class="nv">package</span> <span class="o">=</span> <span class="kt">Package</span><span class="p">(</span>
+    <span class="nv">name</span><span class="p">:</span> <span class="s">"YourProjectName"</span><span class="p">,</span>
+    <span class="nv">dependencies</span><span class="p">:</span> <span class="p">[</span>
+        <span class="o">...</span>
+        <span class="o">.</span><span class="nf">package</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="s">"git@github.com:pusher/push-notifications-server-swift.git"</span><span class="p">,</span> <span class="nv">from</span><span class="p">:</span> <span class="s">"1.0.3"</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="nv">targets</span><span class="p">:</span> <span class="p">[</span>
+      <span class="o">.</span><span class="nf">target</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="s">"YourProjectName"</span><span class="p">,</span> <span class="nv">dependencies</span><span class="p">:</span> <span class="p">[</span><span class="s">"PushNotifications"</span><span class="p">,</span> <span class="o">...</span> <span class="p">])</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+</code></pre>
+
+<p>Use <code>import PushNotifications</code> to access the APIs.</p>
+<h2 id='usage' class='heading'>Usage</h2>
+<pre class="highlight swift"><code><span class="c1">// Pusher Beams Instance Id.</span>
+<span class="k">let</span> <span class="nv">instanceId</span> <span class="o">=</span> <span class="s">"c7c52433-8c65-43e6-9ef2-922d9ed9e196"</span>
+<span class="c1">// Pusher Beams Secret Key.</span>
+<span class="k">let</span> <span class="nv">secretKey</span> <span class="o">=</span> <span class="s">"39817C9BCBF7F053CB151343D54EE75"</span>
+
+<span class="c1">// PushNotifications instance.</span>
+<span class="k">let</span> <span class="nv">pushNotifications</span> <span class="o">=</span> <span class="kt">PushNotifications</span><span class="p">(</span><span class="nv">instanceId</span><span class="p">:</span> <span class="n">instanceId</span><span class="p">,</span> <span class="nv">secretKey</span><span class="p">:</span> <span class="n">secretKey</span><span class="p">)</span>
+
+<span class="c1">// Interests array.</span>
+<span class="k">let</span> <span class="nv">interests</span> <span class="o">=</span> <span class="p">[</span><span class="s">"pizza"</span><span class="p">,</span> <span class="s">"donuts"</span><span class="p">]</span>
+<span class="c1">// Publish request: APNs, FCM.</span>
+<span class="k">let</span> <span class="nv">publishRequest</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="s">"apns"</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s">"aps"</span><span class="p">:</span> <span class="p">[</span>
+      <span class="s">"alert"</span><span class="p">:</span> <span class="s">"Hello"</span>
+    <span class="p">]</span>
+  <span class="p">],</span>
+  <span class="s">"fcm"</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s">"notification"</span><span class="p">:</span> <span class="p">[</span>
+      <span class="s">"title"</span><span class="p">:</span> <span class="s">"Hello"</span><span class="p">,</span>
+      <span class="s">"body"</span><span class="p">:</span>  <span class="s">"Hello, world"</span><span class="p">,</span>
+    <span class="p">]</span>
+  <span class="p">]</span>
+<span class="p">]</span>
+
+<span class="c1">// Publish To Interests</span>
+<span class="n">pushNotifications</span><span class="o">.</span><span class="nf">publishToInterests</span><span class="p">(</span><span class="n">interests</span><span class="p">,</span> <span class="n">publishRequest</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">publishId</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"</span><span class="se">\(</span><span class="n">publishId</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"</span><span class="se">\(</span><span class="n">error</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+
+<span class="c1">// Publish To Users</span>
+<span class="n">pushNotifications</span><span class="o">.</span><span class="nf">publishToUsers</span><span class="p">([</span><span class="s">"jonathan"</span><span class="p">,</span> <span class="s">"jordan"</span><span class="p">,</span> <span class="s">"luís"</span><span class="p">,</span> <span class="s">"luka"</span><span class="p">,</span> <span class="s">"mina"</span><span class="p">],</span> <span class="n">publishRequest</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">publishId</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"</span><span class="se">\(</span><span class="n">publishId</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"</span><span class="se">\(</span><span class="n">error</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+
+<span class="c1">// Authenticate User</span>
+<span class="n">pushNotifications</span><span class="o">.</span><span class="nf">generateToken</span><span class="p">(</span><span class="s">"Elmo"</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">jwtToken</span><span class="p">):</span>
+        <span class="c1">// 'jwtToken' is a Dictionary&lt;String, String&gt;</span>
+        <span class="c1">// Example: ["token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWEiLCJleHAiOjE"]</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"</span><span class="se">\(</span><span class="n">jwtToken</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"</span><span class="se">\(</span><span class="n">error</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+
+<span class="c1">// Delete User</span>
+<span class="n">pushNotifications</span><span class="o">.</span><span class="nf">deleteUser</span><span class="p">(</span><span class="s">"Elmo"</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nv">success</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"User deleted 👌"</span><span class="p">)</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"</span><span class="se">\(</span><span class="n">error</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+</code></pre>
+<h2 id='documentation' class='heading'>Documentation</h2>
+
+<p>Full documentation of the library can be found in the <a href="https://pusher.github.io/pusher-http-swift/">API docs</a>.</p>
+<h2 id='reporting-bugs-and-requesting-features' class='heading'>Reporting bugs and requesting features</h2>
+
+<ul>
+<li>Found a bug? Please open an <a href="https://github.com/pusher/push-notifications-server-swift/issues">issue</a>.</li>
+<li>Have a feature request. Please open an <a href="https://github.com/pusher/push-notifications-server-swift/issues">issue</a>.</li>
+<li>If you want to contribute, please submit a <a href="https://github.com/pusher/push-notifications-server-swift/pulls">pull request</a> (preferably with some tests).</li>
+</ul>
+<h2 id='credits' class='heading'>Credits</h2>
+
+<p>Beams is owned and maintained by <a href="https://pusher.com">Pusher</a>.</p>
+
+<p>It uses code from the following third-party repositories:</p>
+
+<ul>
+<li><a href="https://github.com/Kitura/Swift-JWT">Swift-JWT</a></li>
+</ul>
+<h2 id='license' class='heading'>License</h2>
+
+<p>This project is released under the MIT license. See <a href="https://github.com/pusher/push-notifications-server-swift/blob/master/LICENSE">LICENSE</a> for details if you want to use it in your own project(s).</p>
+
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2021 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2021-05-13)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
