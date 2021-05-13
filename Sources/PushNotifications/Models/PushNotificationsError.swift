@@ -121,3 +121,49 @@ extension PushNotificationsError {
         }
     }
 }
+
+extension PushNotificationsError: Equatable {
+
+    public static func == (lhs: PushNotificationsError, rhs: PushNotificationsError) -> Bool {
+        switch (lhs, rhs) {
+        case (.instanceIdCannotBeAnEmptyString, .instanceIdCannotBeAnEmptyString):
+            return true
+
+        case (.interestsArrayCannotBeEmpty, .interestsArrayCannotBeEmpty):
+            return true
+
+        case (.interestsArrayContainsAnInvalidInterest(let maxOne), .interestsArrayContainsAnInvalidInterest(let maxTwo)):
+            return maxOne == maxTwo
+
+        case (.interestsArrayContainsTooManyInterests(let maxOne), .interestsArrayContainsTooManyInterests(let maxTwo)):
+            return maxOne == maxTwo
+
+        case (.internalError(let errorOne), .internalError(let errorTwo)):
+            return errorOne.localizedDescription == errorTwo.localizedDescription
+
+        case (.secretKeyCannotBeAnEmptyString, .secretKeyCannotBeAnEmptyString):
+            return true
+
+        case (.usersArrayCannotBeEmpty, .usersArrayCannotBeEmpty):
+            return true
+
+        case (.usersArrayCannotContainEmptyString, .usersArrayCannotContainEmptyString):
+            return true
+
+        case (.usersArrayContainsAnInvalidUser(let maxOne), .usersArrayContainsAnInvalidUser(let maxTwo)):
+            return maxOne == maxTwo
+
+        case (.usersArrayContainsTooManyUsers(let maxOne), .usersArrayContainsTooManyUsers(let maxTwo)):
+            return maxOne == maxTwo
+
+        case (.userIdCannotBeAnEmptyString, .userIdCannotBeAnEmptyString):
+            return true
+
+        case (.userIdInvalid(let maxOne), .userIdInvalid(let maxTwo)):
+            return maxOne == maxTwo
+
+        default:
+            return false
+        }
+    }
+}
