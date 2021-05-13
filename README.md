@@ -111,7 +111,7 @@ pushNotifications.deleteUser("Elmo", completion: { result in
 
 ## Documentation
 
-Full documentation of the library can be found in the [API docs](https://pusher.github.io/pusher-http-swift/).
+Full documentation of the library can be found in the [API docs](https://pusher.github.io/push-notifications-server-swift/).
 
 ## Reporting bugs and requesting features
 
