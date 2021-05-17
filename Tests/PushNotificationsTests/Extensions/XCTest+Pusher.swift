@@ -3,25 +3,28 @@ import XCTest
 
 extension XCTestCase {
 
-    /// Verify that a result of an API request contains a specific error.
+    /// Verifies that a `Result` contains a specific error.
     ///
     /// This helper method is useful when testing against expected error conditions.
     /// - Parameters:
-    ///   - result: A `Result<T, PushNotificationsError>` returned from an API request.
-    ///   - expectation: An `XCTestExpectation` which will be fulfilled after inspecting `result`.
-    ///   - expectedError: The `PusherError` which is expected to be found inside `result`.
+    ///   - result: A `Result<Success, Failure>` returned from an API request (or similar operation).
+    ///             Where `Failure: Error & Equatable`.
     ///   - file: The source file that called the receiver.
     ///   - function: The function that called the receiver.
     ///   - line: The line number of the call site of the receiver.
-    func verifyAPIResultFailure<T>(_ result: Result<T, PushNotificationsError>,
-                                   expectation: XCTestExpectation,
-                                   expectedError: PushNotificationsError,
-                                   file: StaticString = #file,
-                                   function: StaticString = #function,
-                                   line: UInt = #line) {
+    ///   - expectation: An `XCTestExpectation` which will be fulfilled after inspecting `result`.
+    ///   - expectedError: The `Failure` which is expected to be found inside `result`.
+    func verifyResultFailure<Success, Failure>(_ result: Result<Success, Failure>,
+                                               file: StaticString = #file,
+                                               function: StaticString = #function,
+                                               line: UInt = #line,
+                                               expectation: XCTestExpectation,
+                                               expectedError: Failure) where Failure: Error & Equatable {
         switch result {
-        case .success:
-            XCTFail("This test should not succeed.", file: file, line: line)
+        case .success(let value):
+            XCTFail("This test should not succeed. Instead found value: \(String(describing: value))",
+                    file: file,
+                    line: line)
 
         case .failure(let error):
             XCTAssertEqual(error, expectedError, file: file, line: line)
@@ -29,27 +32,28 @@ extension XCTestCase {
         expectation.fulfill()
     }
 
-    /// Verify that a result of an API request contains a successful result.
+    /// Verifies that a `Result` contains a successful value.
     /// - Parameters:
-    ///   - result: A `Result<T, PushNotificationsError>` returned from an API request.
-    ///   - expectation: An `XCTestExpectation` which will be fulfilled after inspecting `result`.
-    ///   - validateResultCallback: A closure executed when `result` contains a decoded value.
-    ///                             This can be used to inspect the value and determine its correctness.
+    ///   - result: A `Result<Success, Failure>` returned from an API request (or similar operation).
+    ///             Where `Failure: Error`.
     ///   - file: The source file that called the receiver.
     ///   - function: The function that called the receiver.
     ///   - line: The line number of the call site of the receiver.
-    func verifyAPIResultSuccess<T>(_ result: Result<T, PushNotificationsError>,
-                                   expectation: XCTestExpectation,
-                                   validateResultCallback: (T) -> Void,
-                                   file: StaticString = #file,
-                                   function: StaticString = #function,
-                                   line: UInt = #line) {
+    ///   - expectation: An `XCTestExpectation` which will be fulfilled after inspecting `result`.
+    ///   - validateResultCallback: A closure executed when `result` contains a decoded value.
+    ///                             This can be used to inspect the value and determine its correctness.
+    func verifyResultSuccess<Success, Failure>(_ result: Result<Success, Failure>,
+                                               file: StaticString = #file,
+                                               function: StaticString = #function,
+                                               line: UInt = #line,
+                                               expectation: XCTestExpectation,
+                                               validateResultCallback: (Success) -> Void) where Failure: Error {
         switch result {
         case .success(let value):
             validateResultCallback(value)
 
         case .failure(let error):
-            XCTFail("This test should not fail. Failed with error: \(error.localizedDescription)",
+            XCTFail("This test should not fail. Instead found error: \(error.localizedDescription)",
                     file: file,
                     line: line)
         }
