@@ -8,7 +8,7 @@ final class InstanceConfigurationTests: XCTestCase {
 
         TestObjects.Client.shared.publishToInterests(TestObjects.Interests.validArray,
                                                      TestObjects.Publish.publishRequest) { result in
-            self.verifyAPIResultSuccess(result, expectation: exp) { publishId in
+            self.verifyResultSuccess(result, expectation: exp) { publishId in
                 XCTAssertNotNil(publishId)
             }
         }
@@ -21,9 +21,9 @@ final class InstanceConfigurationTests: XCTestCase {
 
         TestObjects.Client.emptyInstanceId.publishToInterests(TestObjects.Interests.validArray,
                                                               TestObjects.Publish.publishRequest) { result in
-            self.verifyAPIResultFailure(result,
-                                        expectation: exp,
-                                        expectedError: .instanceIdCannotBeAnEmptyString)
+            self.verifyResultFailure(result,
+                                     expectation: exp,
+                                     expectedError: .instanceIdCannotBeAnEmptyString)
         }
 
         wait(for: [exp], timeout: 3)
@@ -34,9 +34,9 @@ final class InstanceConfigurationTests: XCTestCase {
 
         TestObjects.Client.emptySecretKey.publishToInterests(TestObjects.Interests.validArray,
                                                              TestObjects.Publish.publishRequest) { result in
-            self.verifyAPIResultFailure(result,
-                                        expectation: exp,
-                                        expectedError: .secretKeyCannotBeAnEmptyString)
+            self.verifyResultFailure(result,
+                                     expectation: exp,
+                                     expectedError: .secretKeyCannotBeAnEmptyString)
         }
 
         wait(for: [exp], timeout: 3)

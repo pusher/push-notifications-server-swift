@@ -8,7 +8,7 @@ final class UsersTests: XCTestCase {
 
         TestObjects.Client.shared.publishToUsers(TestObjects.UserIDs.validArray,
                                                  TestObjects.Publish.publishRequest) { result in
-            self.verifyAPIResultSuccess(result, expectation: exp) { publishId in
+            self.verifyResultSuccess(result, expectation: exp) { publishId in
                 XCTAssertNotNil(publishId)
             }
         }
@@ -21,9 +21,9 @@ final class UsersTests: XCTestCase {
 
         TestObjects.Client.shared.publishToUsers(TestObjects.UserIDs.emptyArray,
                                                  TestObjects.Publish.publishRequest) { result in
-            self.verifyAPIResultFailure(result,
-                                        expectation: exp,
-                                        expectedError: .usersArrayCannotBeEmpty)
+            self.verifyResultFailure(result,
+                                     expectation: exp,
+                                     expectedError: .usersArrayCannotBeEmpty)
         }
 
         wait(for: [exp], timeout: 3)
@@ -34,9 +34,9 @@ final class UsersTests: XCTestCase {
 
         TestObjects.Client.shared.publishToUsers([TestObjects.UserIDs.emptyString],
                                                  TestObjects.Publish.publishRequest) { result in
-            self.verifyAPIResultFailure(result,
-                                        expectation: exp,
-                                        expectedError: .usersArrayCannotContainEmptyString)
+            self.verifyResultFailure(result,
+                                     expectation: exp,
+                                     expectedError: .usersArrayCannotContainEmptyString)
         }
 
         wait(for: [exp], timeout: 3)
@@ -47,9 +47,9 @@ final class UsersTests: XCTestCase {
 
         TestObjects.Client.shared.publishToUsers([TestObjects.UserIDs.tooLong],
                                                  TestObjects.Publish.publishRequest) { result in
-            self.verifyAPIResultFailure(result,
-                                        expectation: exp,
-                                        expectedError: .usersArrayContainsAnInvalidUser(maxCharacters: 164))
+            self.verifyResultFailure(result,
+                                     expectation: exp,
+                                     expectedError: .usersArrayContainsAnInvalidUser(maxCharacters: 164))
         }
 
         wait(for: [exp], timeout: 3)
@@ -61,9 +61,9 @@ final class UsersTests: XCTestCase {
         TestObjects.Client.shared.publishToUsers(TestObjects.UserIDs.tooMany,
                                                  TestObjects.Publish.publishRequest) { result in
             let error = PushNotificationsError.internalError(NetworkService.Error.failedResponse(statusCode: 422))
-            self.verifyAPIResultFailure(result,
-                                        expectation: exp,
-                                        expectedError: error)
+            self.verifyResultFailure(result,
+                                     expectation: exp,
+                                     expectedError: error)
         }
 
         wait(for: [exp], timeout: 3)
@@ -73,7 +73,7 @@ final class UsersTests: XCTestCase {
         let exp = XCTestExpectation(function: #function)
 
         TestObjects.Client.shared.deleteUser(TestObjects.UserIDs.validId) { result in
-            self.verifyAPIResultSuccess(result, expectation: exp) { voidValue in
+            self.verifyResultSuccess(result, expectation: exp) { voidValue in
                 XCTAssertNotNil(voidValue)
             }
         }
@@ -85,9 +85,9 @@ final class UsersTests: XCTestCase {
         let exp = XCTestExpectation(function: #function)
 
         TestObjects.Client.shared.deleteUser(TestObjects.UserIDs.emptyString) { result in
-            self.verifyAPIResultFailure(result,
-                                        expectation: exp,
-                                        expectedError: .userIdCannotBeAnEmptyString)
+            self.verifyResultFailure(result,
+                                     expectation: exp,
+                                     expectedError: .userIdCannotBeAnEmptyString)
         }
 
         wait(for: [exp], timeout: 3)
@@ -97,9 +97,9 @@ final class UsersTests: XCTestCase {
         let exp = XCTestExpectation(function: #function)
 
         TestObjects.Client.shared.deleteUser(TestObjects.UserIDs.tooLong) { result in
-            self.verifyAPIResultFailure(result,
-                                        expectation: exp,
-                                        expectedError: .userIdInvalid(maxCharacters: 164))
+            self.verifyResultFailure(result,
+                                     expectation: exp,
+                                     expectedError: .userIdInvalid(maxCharacters: 164))
         }
 
         wait(for: [exp], timeout: 3)
