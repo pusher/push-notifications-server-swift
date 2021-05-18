@@ -168,7 +168,7 @@ struct NetworkService {
             }
 
             let statusCode = httpURLResponse.statusCode
-            guard statusCode >= 200 && statusCode < 300, error == nil else {
+            guard 200...299 ~= statusCode, error == nil else {
                 return completion(.failure(Error.failedResponse(statusCode: statusCode)))
             }
 
