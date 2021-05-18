@@ -4,7 +4,7 @@ struct NetworkService {
 
     enum Error: LocalizedError {
 
-        case emptyRepsonseData
+        case emptyResponseData
 
         case failedResponse(statusCode: Int)
 
@@ -14,7 +14,7 @@ struct NetworkService {
 
         var errorDescription: String? {
             switch self {
-            case .emptyRepsonseData:
+            case .emptyResponseData:
                 return NSLocalizedString("The network response does not contain any data.",
                                          comment: "'.emptyRepsonseData' error text")
 
@@ -161,7 +161,7 @@ struct NetworkService {
 
         let dataTask = session.dataTask(with: request) { data, response, error in
             guard let data = data else {
-                return completion(.failure(Error.emptyRepsonseData))
+                return completion(.failure(Error.emptyResponseData))
             }
             guard let httpURLResponse = response as? HTTPURLResponse else {
                 return completion(.failure(Error.unexpectedResponse))
