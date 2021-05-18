@@ -10,6 +10,8 @@ struct NetworkService {
 
         case invalidOrEmptyUrlString
 
+        case invalidPublishRequest
+
         case unexpectedResponse
 
         var errorDescription: String? {
@@ -25,6 +27,9 @@ struct NetworkService {
             case .invalidOrEmptyUrlString:
                 return NSLocalizedString("The request URL string contains illegal characters or is an empty string.",
                                          comment: "'.invalidOrEmptyUrlString' error text")
+            case .invalidPublishRequest:
+                return NSLocalizedString("The provided publish request data cannot be represented as JSON.",
+                                         comment: "'.invalidPublishRequest' error text")
 
             case .unexpectedResponse:
                 return NSLocalizedString("The response was not of the expected 'HTTPURLResponse' type.",
@@ -81,22 +86,22 @@ struct NetworkService {
     func deleteUser(_ userId: String,
                     completion: @escaping (_ result: Result<Void, Swift.Error>) -> Void) {
 
-        do {
+        let urlRequestResult = Result { () -> URLRequest in
             let url = try endpointUrl(path: "/customer_api/v1/instances/\(instanceId)/users/\(userId)")
 
-            let request = urlRequest(for: url,
-                                     httpMethod: "DELETE")
+            return urlRequest(for: url,
+                              httpMethod: "DELETE")
+        }
 
-            networkRequest(request: request) { result in
-                switch result {
-                case .success:
-                    completion(.success(()))
-
-                case .failure(let error):
-                    completion(.failure(error))
-                }
+        switch urlRequestResult {
+        case .success(let request):
+            networkRequest(request: request) { responseResult in
+                completion(responseResult.flatMap { responseData in
+                    Result.success(())
+                })
             }
-        } catch {
+
+        case .failure(let error):
             completion(.failure(error))
         }
     }
@@ -122,7 +127,11 @@ struct NetworkService {
         var mutablePublishRequest = publishRequest
         mutablePublishRequest[type.rawValue] = objects
 
-        do {
+        let urlRequestResult = Result { () -> URLRequest in
+            guard JSONSerialization.isValidJSONObject(mutablePublishRequest) else {
+                throw Error.invalidPublishRequest
+            }
+
             let httpBody = try JSONSerialization.data(withJSONObject: mutablePublishRequest)
 
             var endpointPath = "/publish_api/v1/instances/\(instanceId)/publishes"
@@ -131,25 +140,23 @@ struct NetworkService {
             }
             let url = try endpointUrl(path: endpointPath)
 
-            let request = urlRequest(for: url,
-                                     httpMethod: "POST",
-                                     body: httpBody)
+            return urlRequest(for: url,
+                              httpMethod: "POST",
+                              body: httpBody)
+        }
 
-            networkRequest(request: request) { result in
-                switch result {
-                case .success(let deviceData):
-                    do {
-                        let publishResponse = try JSONDecoder().decode(PublishResponse.self, from: deviceData)
-                        completion(.success(publishResponse.id))
-                    } catch {
-                        completion(.failure(error))
+        switch urlRequestResult {
+        case .success(let request):
+            networkRequest(request: request) { responeResult in
+                completion(responeResult.flatMap { responseData in
+                    Result {
+                        let decodedResponse = try JSONDecoder().decode(PublishResponse.self, from: responseData)
+                        return decodedResponse.id
                     }
-
-                case .failure(let error):
-                    completion(.failure(error))
-                }
+                })
             }
-        } catch {
+
+        case .failure(let error):
             completion(.failure(error))
         }
     }
