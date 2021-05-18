@@ -27,6 +27,7 @@ struct NetworkService {
             case .invalidOrEmptyUrlString:
                 return NSLocalizedString("The request URL string contains illegal characters or is an empty string.",
                                          comment: "'.invalidOrEmptyUrlString' error text")
+
             case .invalidPublishRequest:
                 return NSLocalizedString("The provided publish request data cannot be represented as JSON.",
                                          comment: "'.invalidPublishRequest' error text")
@@ -96,7 +97,7 @@ struct NetworkService {
         switch urlRequestResult {
         case .success(let request):
             networkRequest(request: request) { responseResult in
-                completion(responseResult.flatMap { responseData in
+                completion(responseResult.flatMap { _ in
                     Result.success(())
                 })
             }
